@@ -17,7 +17,7 @@ class SiteConfigBase(object):
           This nested dictionary must contain 3 keys:
             default = the default value that the key will take
             field = a django Field instance used to validate the value
-            help = a help text entry that describes the key 
+            help (optional) = a help text entry that describes the key 
          
         The configuration values should be upper-case by convention.
         """
@@ -32,8 +32,6 @@ class SiteConfigBase(object):
             elif 'field' not in v:
                 raise ImproperlyConfigured(
                     "Config value dict %s must have a 'field' key, which is a valid django field." % (v))
-            elif 'help' not in v:
-                raise ImproperlyConfigured("Config value dict %s must have a 'help' key." % (v))
         super(SiteConfigBase, self).__setattr__('_backend',
             utils.import_module_attr(settings.BACKEND)())
 
