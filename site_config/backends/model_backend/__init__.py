@@ -16,14 +16,14 @@ class DatabaseBackend(ConfigBackend):
     def set(self, key, value, application_slug, website=None):
         created = None
         try:
-            obj = models.WebSiteApplication.objects.get(
+            site_app = models.WebSiteApplication.objects.get(
                                 application__slug=application_slug, website=website)
-            obj.value = value
-            obj.save()
+            site_app.value = value
+            site_app.save()
             created = False
         except models.WebSiteApplication.DoesNotExist:
-            obj = models.ConfigurationKeyValue(
+            site_app = models.ConfigurationKeyValue(
                                 application__slug=application_slug, website=website)
-            obj.save()
+            site_app.save()
             created = True
         return created
