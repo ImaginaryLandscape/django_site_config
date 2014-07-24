@@ -1,9 +1,12 @@
 from __future__ import unicode_literals
+import logging
 from jsonfield import JSONField
 from django.utils.encoding import python_2_unicode_compatible
 from django.db import models
 from django.db.models.signals import post_save
 from site_config import utils
+
+logger = logging.getLogger(__name__)
 
 @python_2_unicode_compatible
 class WebSite(models.Model):
@@ -44,8 +47,8 @@ class WebSiteApplicationQuerySet(models.query.QuerySet):
     def active(self):
         return self.filter(active=True)
 
-    def active_website_applications(self, website_slug, application_slug):
-        return self.active().filter(
+    def website_applications(self, website_slug, application_slug):
+        return self.filter(
                         application__slug=application_slug, 
                         website__slug=website_slug, )
 
@@ -87,7 +90,7 @@ class WebSiteApplication(models.Model):
         app_label = 'site_config'
         verbose_name = "Website Application"
         verbose_name_plural = "Websites Applications"
-        unique_together = ['website', 'application']
+        unique_together = (('website', 'application'),)
 
     def __str__(self):
         return "%s (%s)" % (self.website, self.application)

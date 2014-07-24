@@ -1,6 +1,9 @@
+import logging
 from site_config import utils
 from .. import ConfigBackend
 from . import models
+
+logger = logging.getLogger(__name__)
 
 class DatabaseBackend(ConfigBackend):
 
@@ -11,9 +14,10 @@ class DatabaseBackend(ConfigBackend):
         # set a default 'value' in each nested config dict
         config_dict = utils.config_dict_value_from_default(config_dict)
         # lookup the site application
-        site_app_list = models.WebSiteApplication.objects.active_website_applications(
+        site_app_list = models.WebSiteApplication.objects.website_applications(
                         website_slug=website, application_slug=application_slug, 
                         )
+        #raise Exception(site_app_list.values_list('website__slug', 'application__slug', ))
         if site_app_list.count() == 1:
             site_app = site_app_list[0]
             config_dict = site_app.get_config_options(config_dict)

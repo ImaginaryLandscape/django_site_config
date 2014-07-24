@@ -1,8 +1,10 @@
+import logging
 from django.core.exceptions import ImproperlyConfigured
 from django import forms
 from . import settings
 from . import utils
 
+logger = logging.getLogger(__name__)
 
 class SiteConfigBase(object):
     
