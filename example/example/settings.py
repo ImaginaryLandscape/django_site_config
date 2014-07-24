@@ -40,6 +40,9 @@ INSTALLED_APPS = (
 
     'site_config',
     'site_config.backends.model_backend',
+
+    'example.app1',
+
 )
 
 MIDDLEWARE_CLASSES = (
