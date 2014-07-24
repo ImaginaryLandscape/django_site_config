@@ -1,7 +1,8 @@
+from django.core.exceptions import ImproperlyConfigured
+from django import forms
 from . import settings
 from . import utils
 
-from django import forms
 
 class SiteConfigBase(object):
     
@@ -12,7 +13,11 @@ class SiteConfigBase(object):
         """
         Returns a dictionary of configuration variables and their defaults. 
         The dictionary keys set the configuration variables.
-        The dictionary values set the configuration default settings. 
+        The dictionary values are another nested dictionary.
+          This nested dictionary must contain 3 keys:
+            default = the default value that the key will take
+            field = a django Field instance used to validate the value
+            help = a help text entry that describes the key 
          
         The configuration values should be upper-case by convention.
         """
