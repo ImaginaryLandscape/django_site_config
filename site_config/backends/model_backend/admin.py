@@ -37,9 +37,21 @@ class ApplicationAdmin(admin.ModelAdmin):
 
 
 class WebSiteApplicationAdmin(admin.ModelAdmin):
-    list_display=['id', 'website', 'application', 'active',]
+
+    def application_active(self, obj):
+        return True if obj.application.active else False
+    application_active.short_description = 'App Active'
+    application_active.boolean = True
+
+    def website_active(self, obj):
+        return True if obj.website.active else False
+    website_active.short_description = 'Website Active'
+    website_active.boolean = True
+
+    list_display=['id', 'website', 'website_active', 'application', 'application_active', 'active',]
     list_editable=['active',]
     list_filter=['active']
+    readonly_fields = ['website_active', 'application_active' ]
 
     def get_form(self, request, obj=None, **kwargs):
         meta_options = {
@@ -54,12 +66,16 @@ class WebSiteApplicationAdmin(admin.ModelAdmin):
             config_lookup = settings.config_registry.get_config_class(obj.application.slug)
             if config_lookup:
                 config_class = config_lookup[1](website=obj.website.slug)
+                config_fields = []
                 for config_name, value in config_class.get_configs().items():
+                    config_fields.append(config_name)
                     properties.update( {
                         config_name: value['field'](label=config_name,
                                     help_text=value['help'], 
                                     initial=value['default'], required=False),
                     })
+                # for deserialization, we need to know which fields are config fields
+                properties.update({"config_fields": config_fields})
 
         form = type('WebSiteApplicationAdminForm', (forms.ModelForm,), properties)
     
