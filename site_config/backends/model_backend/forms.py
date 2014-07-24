@@ -28,15 +28,20 @@ def website_application_formfactory(instance=None):
                                     lookup_dict.get('help', ''), lookup_dict['default']), 
                                 initial=lookup_dict['value'], required=False),
                 })
+            properties.update({'reset_options':forms.BooleanField(label="Reset to Defaults",
+                                                                  required=False, initial=False)})
     
     def clean_form(self):
         cleaned_data = self.cleaned_data
         if instance and config_class:
-            cleaned_configs = {}
-            for k,v in cleaned_data.items():
-                if k in config_fields:
-                    cleaned_configs.update({k:{'value':cleaned_data.pop(k)}})
-            cleaned_data['options'] = utils.update_config_dict(config_class.get_configs(), cleaned_configs)
+            if cleaned_data.get('reset_options'):
+                cleaned_data['options'] = utils.config_dict_value_from_default(config_class.get_configs())
+            else:
+                cleaned_configs = {}
+                for k,v in cleaned_data.items():
+                    if k in config_fields:
+                        cleaned_configs.update({k:{'value':cleaned_data.pop(k)}})
+                cleaned_data['options'] = utils.update_config_dict(config_class.get_configs(), cleaned_configs)
             #raise forms.ValidationError("%s" % cleaned_data)
         return cleaned_data
     
