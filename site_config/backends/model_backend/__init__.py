@@ -1,29 +1,35 @@
+from site_config import utils
 from .. import ConfigBackend
 from . import models
 
 class DatabaseBackend(ConfigBackend):
 
-    def get(self, key, lookup_dict, application_slug, website=None):
-        site_app = models.WebSiteApplication.objects.active_website_applications(
+    def get(self, key, config_dict, application_slug, website=None):
+        return self.mget(config_dict, application_slug, website).get(key)
+    
+    def mget(self, config_dict, application_slug, website=None):
+        # set a default 'value' in each nested config dict
+        config_dict = utils.config_dict_value_from_default(config_dict)
+        # lookup the site application
+        site_app_list = models.WebSiteApplication.objects.active_website_applications(
                         website_slug=website, application_slug=application_slug, 
                         )
-        if site_app.count() == 1:
-            lookup_dict.update({'value':site_app[0].get_config_option(key, lookup_dict['default'])})
-        else:
-            lookup_dict.update({'value':lookup_dict['default']})
-        return lookup_dict
+        if site_app_list.count() == 1:
+            site_app = site_app_list[0]
+            config_dict = site_app.get_config_options(config_dict)
+        return config_dict
     
-    def set(self, key, value, application_slug, website=None):
-        created = None
+    def set(self, config_name, value, config_dict, application_slug, website=None):
+        config_dict = config_dict.copy()
+        if config_name in config_dict:
+            config_dict[config_name].update({'value':value})
+        return self.mset(config_dict, application_slug, website)
+    
+    def mset(self, config_dict, application_slug, website=None):
         try:
             site_app = models.WebSiteApplication.objects.get(
                                 application__slug=application_slug, website=website)
-            site_app.value = value
-            site_app.save()
-            created = False
+            site_app.set_config_options(config_dict)
         except models.WebSiteApplication.DoesNotExist:
-            site_app = models.ConfigurationKeyValue(
-                                application__slug=application_slug, website=website)
-            site_app.save()
-            created = True
-        return created
+            raise 
+        return site_app

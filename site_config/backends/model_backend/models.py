@@ -3,7 +3,7 @@ from jsonfield import JSONField
 from django.utils.encoding import python_2_unicode_compatible
 from django.db import models
 from django.db.models.signals import post_save
-
+from site_config import utils
 
 @python_2_unicode_compatible
 class WebSite(models.Model):
@@ -75,12 +75,14 @@ class WebSiteApplication(models.Model):
     
     objects = WebSiteApplicationManager()
     
-    def get_config_option(self, key, default):
-        return_value  = default
-        if self.options:
-            return_value = self.options.get(key, default)
-        return return_value
-    
+    def get_config_options(self, default_config_dict):
+        return utils.update_config_dict(default_config_dict, self.options)
+
+    def set_config_options(self, config_dict, save=True):
+        self.options = config_dict
+        if save:
+            self.save()
+
     class Meta:
         app_label = 'site_config'
         verbose_name = "Website Application"

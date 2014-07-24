@@ -105,6 +105,10 @@ class WebSiteApplicationAdmin(admin.ModelAdmin):
         
         return form
 
+    def save_model(self, request, obj, form, change):
+        obj.set_config_options(form.cleaned_data.get('options', {}), save=False)
+        obj.save()
+
 
 admin.site.register(models.WebSite, WebSiteAdmin)
 admin.site.register(models.Application, ApplicationAdmin)
