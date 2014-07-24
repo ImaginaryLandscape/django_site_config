@@ -20,7 +20,9 @@ class WebSiteAdmin(admin.ModelAdmin):
 
 class ApplicationAdminForm(forms.ModelForm):
     
-    slug = forms.ChoiceField(choices=settings.config_registry.get_config_list())
+    def __init__(self, *args, **kwargs):
+        super(ApplicationAdminForm, self).__init__(*args, **kwargs)
+        self.fields['slug'] = forms.ChoiceField(choices=settings.config_registry.get_config_list())
     
     class Meta:
         model = models.Application
@@ -46,7 +48,9 @@ class WebSiteApplicationAdmin(admin.ModelAdmin):
         }
         properties = {"Meta": type('Meta', (), meta_options)}
         
+        # only add config options for existing objects
         if obj:
+            # lookup the configuration class for this object, based on the application slug
             config_lookup = settings.config_registry.get_config_class(obj.application.slug)
             if config_lookup:
                 config_class = config_lookup[1](website=obj.website.slug)
