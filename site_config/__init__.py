@@ -21,8 +21,8 @@ class SiteConfigBase(object):
          
         The configuration values should be upper-case by convention.
         """
-        return {'TEST_A':{'default':"Test A default", 'field':forms.CharField, 'help':'Test A help text.'}, 
-                "TEST_B":{'default':1, 'field':forms.IntegerField, 'help':'Test B help text.'}}
+        return {'EXAMPLE_A':{'default':"Test A default", 'field':forms.CharField, 'help':'Test A help text.'}, 
+                "EXAMPLE_B":{'default':1, 'field':forms.IntegerField, 'help':'Test B help text.'}}
     
     def __init__(self, website=None):
         self.website = website
