@@ -60,13 +60,31 @@ class WebSiteApplicationAdmin(admin.ModelAdmin):
     list_filter=['active']
     readonly_fields = ['website_active', 'application_active' ]
 
+    def __init__(self, *args, **kwargs):
+        super(WebSiteApplicationAdmin, self).__init__(*args, **kwargs)
+        self.fieldsets = [
+            [None, {
+                'fields': (('website', 'website_active'), 
+                           ('application', 'application_active',),
+                           'active', 'description', )
+            }],
+        ]
+
     def get_form(self, request, obj=None, **kwargs):
         meta_options = {
              "model":models.WebSiteApplication, 
              'exclude':['options',],
         }
         properties = {"Meta": type('Meta', (), meta_options)}
-        
+
+        self.fieldsets = [
+            [None, {
+                'fields': (('website', 'website_active'), 
+                           ('application', 'application_active',),
+                           'active', 'description', )
+            }],
+        ]
+
         # only add config options for existing objects
         if obj:
             # lookup the configuration class for this object, based on the application slug
@@ -83,6 +101,8 @@ class WebSiteApplicationAdmin(admin.ModelAdmin):
                     })
                 # for deserialization, we need to know which fields are config fields
                 properties.update({"config_fields": config_fields})
+                self.fieldsets.append(["Options", {"fields":config_fields}],)
+
 
         form = type('WebSiteApplicationAdminForm', (forms.ModelForm,), properties)
     
