@@ -75,10 +75,10 @@ class WebSiteApplication(models.Model):
     
     objects = WebSiteApplicationManager()
     
-    def get_config_option(self, key):
-        return_value  = None
+    def get_config_option(self, key, default):
+        return_value  = default
         if self.options:
-            return_value = self.options.get(key)
+            return_value = self.options.get(key, default)
         return return_value
     
     class Meta:

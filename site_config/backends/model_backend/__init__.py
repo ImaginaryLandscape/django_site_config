@@ -3,14 +3,13 @@ from . import models
 
 class DatabaseBackend(ConfigBackend):
 
-    def get(self, key, default, application_slug, website=None):
-        return_value = default
+    def get(self, key, lookup_dict, application_slug, website=None):
         site_app = models.WebSiteApplication.objects.active_website_applications(
                         website_slug=website, application_slug=application_slug, 
                         )
         if site_app.count() == 1:
-            return_value = site_app[0].get_config_option(key)
-        return return_value
+            lookup_dict.update({'default':site_app[0].get_config_option(key, lookup_dict['default'])})
+        return lookup_dict
     
     def set(self, key, value, application_slug, website=None):
         created = None

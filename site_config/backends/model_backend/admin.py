@@ -52,7 +52,9 @@ class WebSiteApplicationAdmin(admin.ModelAdmin):
                 config_class = config_lookup[1](website=obj.website.slug)
                 for config_name, value in config_class.get_configs().items():
                     properties.update( {
-                        config_name: forms.CharField(required=False),
+                        config_name: value['field'](label=config_name,
+                                    help_text=value['help'], 
+                                    initial=value['default'], required=False),
                     })
 
         form = type('WebSiteApplicationAdminForm', (forms.ModelForm,), properties)

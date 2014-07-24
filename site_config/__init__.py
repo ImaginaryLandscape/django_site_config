@@ -1,6 +1,8 @@
 from . import settings
 from . import utils
 
+from django import forms
+
 class SiteConfigBase(object):
     
     application_slug = "default_application"
@@ -14,10 +16,19 @@ class SiteConfigBase(object):
          
         The configuration values should be upper-case by convention.
         """
-        return {'TEST':"joe", "TESTB":1}
+        return {'TEST_A':{'default':"Test A default", 'field':forms.CharField, 'help':'Test A help text.'}, 
+                "TEST_B":{'default':1, 'field':forms.IntegerField, 'help':'Test B help text.'}}
     
     def __init__(self, website=None):
         self.website = website
+        for k, v in self.get_default_config().items():
+            if 'default' not in v:
+                raise ImproperlyConfigured("Config value dict %s must have a 'default' key." % (v))
+            elif 'field' not in v:
+                raise ImproperlyConfigured(
+                    "Config value dict %s must have a 'field' key, which is a valid django field." % (v))
+            elif 'help' not in v:
+                raise ImproperlyConfigured("Config value dict %s must have a 'help' key." % (v))
         super(SiteConfigBase, self).__setattr__('_backend',
             utils.import_module_attr(settings.BACKEND)())
 
