@@ -71,11 +71,6 @@ class WebSiteApplicationAdmin(admin.ModelAdmin):
         ]
 
     def get_form(self, request, obj=None, **kwargs):
-        meta_options = {
-             "model":models.WebSiteApplication, 
-             'exclude':['options',],
-        }
-        properties = {"Meta": type('Meta', (), meta_options)}
 
         self.fieldsets = [
             [None, {
@@ -84,6 +79,13 @@ class WebSiteApplicationAdmin(admin.ModelAdmin):
                            'active', 'description', )
             }],
         ]
+
+        meta_options = {
+             "model":models.WebSiteApplication, 
+             'exclude':['options',],
+        }
+        properties = {"Meta": type('Meta', (), meta_options)}
+
 
         # only add config options for existing objects
         if obj:
