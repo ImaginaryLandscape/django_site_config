@@ -3,6 +3,7 @@ from django import forms
 from django.core.urlresolvers import reverse
 from site_config import settings
 from . import models
+from . import forms as backend_forms
 
 
 class WebSiteApplicationInline(admin.StackedInline):
@@ -98,35 +99,10 @@ class WebSiteApplicationAdmin(admin.ModelAdmin):
             }],
         ]
 
-        meta_options = {
-             "model":models.WebSiteApplication, 
-             'exclude':['options',],
-        }
-        properties = {"Meta": type('Meta', (), meta_options)}
-
-
-        # only add config options for existing objects
-        if obj:
-            # lookup the configuration class for this object, based on the application slug
-            config_lookup = settings.config_registry.get_config_class(obj.application.slug)
-            if config_lookup:
-                config_class = config_lookup[1](website=obj.website.slug)
-                config_fields = []
-                for config_name, lookup_dict in config_class.get_configs().items():
-                    config_fields.append(config_name)
-                    properties.update( {
-                        config_name: lookup_dict['field'](label=config_name,
-                                    help_text="%s Default: %s" % (
-                                        lookup_dict.get('help', ''), lookup_dict['value']), 
-                                    initial=lookup_dict['value'], required=False),
-                    })
-                # for deserialization, we need to know which fields are config fields
-                properties.update({"config_fields": config_fields})
-                self.fieldsets.append(["Configuration Options", {"fields":config_fields}],)
-
-
-        form = type('WebSiteApplicationAdminForm', (forms.ModelForm,), properties)
-    
+        form = backend_forms.website_application_formfactory(instance=obj)
+        if form.config_fields:
+            self.fieldsets.append(["Configuration Options", {"fields":form.config_fields}],)
+        
         return form
 
 
