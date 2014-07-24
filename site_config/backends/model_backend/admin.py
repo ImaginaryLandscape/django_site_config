@@ -1,12 +1,19 @@
 from django.contrib import admin
 from django import forms
+from django.core.urlresolvers import reverse
 from site_config import settings
 from . import models
 
 
 class WebSiteApplicationInline(admin.StackedInline):
+    def detail_link(self, obj):
+        return "<a href='%s'>detail</a>" % (reverse('admin:site_config_websiteapplication_change', args=(obj.id,)))
+    detail_link.short_description = 'Link to Detail Page'
+    detail_link.allow_tags = True
+    
     model = models.WebSiteApplication
     exclude = ['options']
+    readonly_fields = ['detail_link']
     extra = 0
 
 
