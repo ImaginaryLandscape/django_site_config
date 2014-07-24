@@ -27,7 +27,6 @@ You also need to register the config class with the "register()" method.
 
 See the example below 
 
-	from django import forms
 	import site_config
 	
 	class MyAppSiteConfig(site_config.SiteConfigBase):
@@ -49,3 +48,10 @@ See the example below
     c = FormbundleConfig(website="stjoseph")
     c.TEST_A
     c.TEST_B
+    
+    
+# TESTING
+
+  pip install -e .[testing]
+  cd example/
+  ./manage.py test site_config

@@ -88,4 +88,4 @@ class SiteConfigBase(object):
         return self.get_default_configs().keys()
     
 
-settings.config_registry.register(SiteConfigBase)
+#settings.config_registry.register(SiteConfigBase)

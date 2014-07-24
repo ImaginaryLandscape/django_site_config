@@ -11,7 +11,7 @@ setup(name='site_config',
        'django >= 1.6', 
        'jsonfield>=0.9.22',
       ],
+      extras_require = {
+        'testing':  ["mock >= 1.0.1", ],
+     }      
 )
-
-# Add
-# jsonfield==0.9.22
