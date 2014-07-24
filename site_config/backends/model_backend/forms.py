@@ -1,7 +1,9 @@
+import logging
 from django import forms
 from site_config import settings, utils
 from . import models
 
+logger = logging.getLogger(__name__)
 
 def website_application_formfactory(instance=None):
     config_class = None
@@ -32,7 +34,7 @@ def website_application_formfactory(instance=None):
                                                                   required=False, initial=False)})
     
     def clean_form(self):
-        cleaned_data = self.cleaned_data
+        cleaned_data = super(self.__class__, self).clean()
         if instance and config_class:
             if cleaned_data.get('reset_options'):
                 cleaned_data['options'] = utils.config_dict_value_from_default(config_class.get_configs())
