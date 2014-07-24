@@ -39,7 +39,7 @@ class SiteConfigBase(object):
 
     def __getattr__(self, name):
         if name in self.get_default_config().keys():
-            return self.get_config(name)['default']
+            return self.get_config(name)['value']
         else:
             raise AttributeError("%r object has no attribute %r" %
                          (self.__class__, name))

@@ -8,7 +8,9 @@ class DatabaseBackend(ConfigBackend):
                         website_slug=website, application_slug=application_slug, 
                         )
         if site_app.count() == 1:
-            lookup_dict.update({'default':site_app[0].get_config_option(key, lookup_dict['default'])})
+            lookup_dict.update({'value':site_app[0].get_config_option(key, lookup_dict['default'])})
+        else:
+            lookup_dict.update({'value':lookup_dict['default']})
         return lookup_dict
     
     def set(self, key, value, application_slug, website=None):

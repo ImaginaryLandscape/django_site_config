@@ -57,7 +57,7 @@ class WebSiteApplicationAdmin(admin.ModelAdmin):
 
     list_display=['id', 'website', 'website_active', 'application', 'application_active', 'active',]
     list_editable=['active',]
-    list_filter=['active']
+    list_filter=['active', 'website', 'application']
     readonly_fields = ['website_active', 'application_active' ]
 
     def __init__(self, *args, **kwargs):
@@ -92,16 +92,16 @@ class WebSiteApplicationAdmin(admin.ModelAdmin):
             if config_lookup:
                 config_class = config_lookup[1](website=obj.website.slug)
                 config_fields = []
-                for config_name, value in config_class.get_configs().items():
+                for config_name, lookup_dict in config_class.get_configs().items():
                     config_fields.append(config_name)
                     properties.update( {
-                        config_name: value['field'](label=config_name,
-                                    help_text=value['help'], 
-                                    initial=value['default'], required=False),
+                        config_name: lookup_dict['field'](label=config_name,
+                                    help_text="%s Default: %s" % (lookup_dict['help'], lookup_dict['value']), 
+                                    initial=lookup_dict['value'], required=False),
                     })
                 # for deserialization, we need to know which fields are config fields
                 properties.update({"config_fields": config_fields})
-                self.fieldsets.append(["Options", {"fields":config_fields}],)
+                self.fieldsets.append(["Configuration Options", {"fields":config_fields}],)
 
 
         form = type('WebSiteApplicationAdminForm', (forms.ModelForm,), properties)
