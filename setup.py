@@ -1,13 +1,17 @@
 #!/usr/bin/env python
 
-from distutils.core import setup
+from setuptools import setup
 
 setup(name='site_config',
       version='0.0.1',
       description='istribution Utilities',
       author='Joe Jasinski',
       author_email='jjasinski@imagesape.com',
-     )
+      install_requires=[
+       'django >= 1.6', 
+       'jsonfield>=0.9.22',
+      ],
+)
 
 # Add
 # jsonfield==0.9.22
