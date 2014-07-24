@@ -1,3 +1,4 @@
+from __future__ import unicode_literals
 import logging
 from site_config import utils
 from .. import ConfigBackend

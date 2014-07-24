@@ -1,3 +1,4 @@
+from __future__ import unicode_literals
 import logging
 from django.core.exceptions import ImproperlyConfigured
 from django import forms

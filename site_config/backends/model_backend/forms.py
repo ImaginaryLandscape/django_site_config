@@ -1,3 +1,4 @@
+from __future__ import unicode_literals
 import logging
 from django import forms
 from site_config import settings, utils
@@ -11,7 +12,7 @@ def website_application_formfactory(instance=None):
          "model":models.WebSiteApplication, 
          'exclude':['options',],
     }
-    properties = {"Meta": type('Meta', (), meta_options)}
+    properties = {"Meta": type(b'Meta', (), meta_options)}
     # for deserialization, we need to know which fields are config fields
     config_fields = []
     # only add config options for existing objects
@@ -47,5 +48,5 @@ def website_application_formfactory(instance=None):
         return cleaned_data
     
     properties.update({"config_fields": config_fields, 'clean':clean_form})
-    form = type('WebSiteApplicationAdminForm', (forms.ModelForm,), properties)
+    form = type(b'WebSiteApplicationAdminForm', (forms.ModelForm,), properties)
     return form
