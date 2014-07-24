@@ -42,7 +42,6 @@ def website_application_formfactory(instance=None):
                     if k in config_fields:
                         cleaned_configs.update({k:{'value':cleaned_data.pop(k)}})
                 cleaned_data['options'] = utils.update_config_dict(config_class.get_configs(), cleaned_configs)
-            #raise forms.ValidationError("%s" % cleaned_data)
         return cleaned_data
     
     properties.update({"config_fields": config_fields, 'clean':clean_form})

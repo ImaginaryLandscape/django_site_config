@@ -77,10 +77,9 @@ class SiteConfigBase(object):
                               'help':'Test B help text.', 'value':"looked-up value B"}}
         """
         return self._backend.mget(self.get_default_configs(), self.application_slug, self.website)
-        #return {k:self.get_config(k) for k in  self.get_default_configs().keys() } 
     
     def set_config(self, key, value,):
-        self._backend.set(key, value, self.application_slug, self.website)
+        self._backend.set(key, value, self.get_default_configs(), self.application_slug, self.website)
         
     def __dir__(self):
         return self.get_default_configs().keys()
