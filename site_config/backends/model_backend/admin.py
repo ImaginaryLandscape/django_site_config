@@ -80,16 +80,6 @@ class WebSiteApplicationAdmin(admin.ModelAdmin):
     list_filter=['active', 'website', 'application']
     readonly_fields = ['website_active', 'application_active', 'website_link', 'application_link']
 
-    def __init__(self, *args, **kwargs):
-        super(WebSiteApplicationAdmin, self).__init__(*args, **kwargs)
-        self.fieldsets = [
-            [None, {
-                'fields': (('website', 'website_active', 'website_link',), 
-                           ('application', 'application_active', 'application_link',),
-                           'active', 'description', )
-            }],
-        ]
-
     def get_form(self, request, obj=None, **kwargs):
 
         self.fieldsets = [
