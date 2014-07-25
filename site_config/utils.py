@@ -17,8 +17,8 @@ def update_config_dict(default_config_dict, updated_config_dict):
     return config_dict
 
 def config_dict_value_from_default(default_config_dict):
-    config_dict = default_config_dict.copy()
+    new_config_dict = default_config_dict.copy()
     # set a default 'value' in each nested config dict
-    for config_name, x in config_dict.items():
-        config_dict[config_name].update({'value':config_dict[config_name]['default']})
-    return config_dict
+    for config_name, x in new_config_dict.items():
+        new_config_dict[config_name].update({'value':new_config_dict[config_name]['default']})
+    return new_config_dict
