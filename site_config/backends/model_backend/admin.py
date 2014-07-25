@@ -61,7 +61,7 @@ class WebSiteApplicationAdmin(admin.ModelAdmin):
         return_value = None
         if obj:
             return_value =  "<a href='%s' onclick='return showAddAnotherPopup(this);'>Link</a>" % (
-                            reverse('admin:site_config_website_change', args=(obj.website.id,)))
+                reverse('admin:site_config_website_change', args=(obj.website.id,)))
         return return_value
     website_link.short_description = 'Link'
     website_link.allow_tags = True
@@ -70,7 +70,7 @@ class WebSiteApplicationAdmin(admin.ModelAdmin):
         return_value = None
         if obj:
             return_value =  "<a href='%s' onclick='return showAddAnotherPopup(this);'>Link</a>" % (
-                            reverse('admin:site_config_application_change', args=(obj.application.id,)))
+                reverse('admin:site_config_application_change', args=(obj.application.id,)))
         return return_value
     application_link.short_description = 'Link'
     application_link.allow_tags = True

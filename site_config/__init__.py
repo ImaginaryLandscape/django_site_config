@@ -25,9 +25,11 @@ class SiteConfigBase(object):
         The configuration values should be upper-case by convention.
         """
         return {'EXAMPLE_A':{'default':"Test A default",
-                             'field':'django.forms.CharField', 'help':'Test A help text.'}, 
-                "EXAMPLE_B":{'default':1, 
-                             'field':'django.forms.IntegerField', 'help':'Test B help text.'}}
+                             'field':'django.forms.CharField',
+                             'help':'Test A help text.'},
+                "EXAMPLE_B":{'default':1,
+                             'field':'django.forms.IntegerField',
+                             'help':'Test B help text.'}}
     
     def __init__(self, website=None):
         self.website = website
@@ -74,10 +76,14 @@ class SiteConfigBase(object):
         nested dictionaries.  These value keys are the result of the configuration lookup
         or the default specified by the default nested dictionary keys.
         Example Return Value:
-                {"EXAMPLE_A":{'default':"Test A default", 'field':forms.CharField, 
-                              'help':'Test A help text.', 'value':"looked-up value A"}, 
-                 "EXAMPLE_B":{'default':1, 'field':forms.IntegerField, 
-                              'help':'Test B help text.', 'value':"looked-up value B"}}
+                {"EXAMPLE_A":{'default':"Test A default", 
+                              'field':forms.CharField,
+                              'help':'Test A help text.',
+                              'value':"looked-up value A"}, 
+                 "EXAMPLE_B":{'default':1, 
+                              'field':forms.IntegerField, 
+                              'help':'Test B help text.', 
+                              'value':"looked-up value B"}}
         """
         return self._backend.mget(self.get_default_configs(), self.application_slug, self.website)
     
