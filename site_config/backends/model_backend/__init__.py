@@ -18,7 +18,6 @@ class DatabaseBackend(ConfigBackend):
         site_app_list = models.WebSiteApplication.objects.website_applications(
                         website_slug=website_slug, application_slug=application_slug, 
                         )
-        #raise Exception(site_app_list.values_list('website__slug', 'application__slug', ))
         if site_app_list.count() == 1:
             site_app = site_app_list[0]
             config_dict = site_app.get_config_options(config_dict)
