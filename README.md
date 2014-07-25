@@ -22,6 +22,10 @@ Each nested dictionary must contain 3 keys:
  - default = the default value that the key will take
  - field = a django Field instance used to validate the value
  - help (optional) = a help text entry that describes the key 
+ - choices (optional) = a list of tuples constraining the input.
+   Only works with fields that are like ChoiceField that take
+   choices as part of the constructor
+    i.e. (('a_slug','A text'),('b_slug', 'B text'))
 
 You also need to register the config class with the "register()" method.
 

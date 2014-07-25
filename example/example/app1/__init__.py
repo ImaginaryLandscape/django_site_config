@@ -12,3 +12,24 @@ class MyAppSiteConfig(site_config.SiteConfigBase):
 
 site_config.settings.config_registry.register(MyAppSiteConfig)
 
+
+class MyFunConfig(site_config.SiteConfigBase):
+
+    application_slug = "myfun"
+    application_verbose_name = "My Fun App 1"
+
+    def get_default_configs(self):
+        return {'MYFUN_EMAIL':{'default':"joe@exampe.com", 
+                               'field':'django.forms.CharField', 
+                               'help':'Test A help text.'}, 
+                "MYFUN_NUM":{'default':1, 
+                             'field':'django.forms.IntegerField', 
+                             'help':'Enter a number.'},
+                "MYFUN_CHAR":{'default':"b", 
+                              'field':'django.forms.ChoiceField', 
+                              'help':'Test B help text.', 
+                              'choices':(('a',"A choice"),("b","B Choice"),)},
+                }
+
+site_config.settings.config_registry.register(MyFunConfig)
+

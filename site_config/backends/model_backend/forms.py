@@ -25,11 +25,15 @@ def website_application_formfactory(instance=None):
             for config_name, lookup_dict in config_class.get_configs().items():
                 config_fields.append(config_name)
                 field_class = utils.import_module_attr(lookup_dict['field'])
+                kwargs=dict(label=config_name,
+                            help_text="%s Default: %s" % (lookup_dict.get('help', ''), 
+                                                          lookup_dict['default']), 
+                            initial=lookup_dict['value'],
+                            required=False)
+                if 'choices' in lookup_dict:
+                    kwargs.update({'choices':lookup_dict['choices']})
                 properties.update( {
-                    config_name: field_class(label=config_name,
-                                help_text="%s Default: %s" % (
-                                    lookup_dict.get('help', ''), lookup_dict['default']), 
-                                initial=lookup_dict['value'], required=False),
+                    config_name: field_class(**kwargs),
                 })
             properties.update({'reset_options':forms.BooleanField(label="Reset to Defaults",
                                                                   required=False, initial=False)})
