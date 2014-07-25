@@ -9,13 +9,13 @@ class SiteConfigMixin(object):
 
     def load_config(self):
         
-        config_dict = {'TEST_A':{'default':
-                                  "Test A default", 
-                                  'field':'django.forms.CharField', 
-                                  'help':'Test A help text.'}, 
-                       "TEST_B":{'default':1, 
-                                  'field':'django.forms.IntegerField', 
-                                  'help':'Test B help text.'}} 
+        config_dict = {'TEST_A':{'default':"Test A default", 
+                                 'field':'django.forms.CharField', 
+                                 'help':'Test A help text.'},
+                       "TEST_B":{'default':1,
+                                 'field':'django.forms.IntegerField', 
+                                 'help':'Test B help text.'},
+                       }
         self.config_dict = config_dict
         
 
@@ -29,9 +29,10 @@ class TestSiteConfigRegistry(SiteConfigMixin, TestCase):
             self.assertEqual(v['default'], v['value'], )
 
     def test_config_dict_value_from_default__default_equals_value(self):
-        before = self.config_dict.keys()
+        self.assertNotIn("value", self.config_dict['TEST_A'])
+        self.assertNotIn("value", self.config_dict['TEST_B'])
         updated_config_dict = utils.config_dict_value_from_default(self.config_dict)
-        after = self.config_dict.keys()
-        self.assertListEqual(before, after,)
-        
-        self.assertEqual(updated_config_dict['TEST_A'].keys(), self.config_dict['TEST_A'].keys(), )
+        self.assertIn("value", updated_config_dict['TEST_A'])
+        self.assertIn("value", updated_config_dict['TEST_B']) 
+        self.assertNotIn("value", self.config_dict['TEST_A'])
+        self.assertNotIn("value", self.config_dict['TEST_B'])
