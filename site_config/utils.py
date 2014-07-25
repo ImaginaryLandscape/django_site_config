@@ -43,6 +43,16 @@ def update_config_dict(default_config_dict, updated_config_dict):
 
 
 def config_dict_value_from_default(default_config_dict):
+    """
+    Takes a config_dict and updates the "value" attribute of 
+    all of the nested "meta" dicts to the value of the corresponding
+    "default" attribute.  
+    
+    INPUT
+     default_config_dict = see the output of 
+          site_config.get_default_configs()
+    """
+    
     new_config_dict = deepcopy(default_config_dict)
     # set a default 'value' in each nested config dict
     for config_name, x in new_config_dict.items():

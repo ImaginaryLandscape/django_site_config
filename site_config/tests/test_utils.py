@@ -57,7 +57,6 @@ class TestSiteConfigRegistry(SiteConfigMixin, TestCase):
                                'TEST_C': {"value": 2},
                                }
         updated = utils.update_config_dict(self.config_dict, updated_config_dict)
-        print(updated)
         self.assertEqual(updated["TEST_A"]["value"], "5432", )
         self.assertTrue(updated.has_key("TEST_B"))
         self.assertFalse(updated.has_key('TEST_C'))
