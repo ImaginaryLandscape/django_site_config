@@ -30,8 +30,8 @@ def website_application_formfactory(instance=None):
                                                           lookup_dict['default']), 
                             initial=lookup_dict['value'],
                             required=False)
-                if 'choices' in lookup_dict:
-                    kwargs.update({'choices':lookup_dict['choices']})
+                if hasattr(field_class, 'choices'):
+                    kwargs.update({'choices':lookup_dict.get('choices', None)})
                 properties.update( {
                     config_name: field_class(**kwargs),
                 })
