@@ -9,8 +9,6 @@ settings = import_module_attr(
 BACKEND = getattr(settings, 'SITECONFIG_BACKEND',
                   'site_config.backends.model_backend.DatabaseBackend')
 
-CONFIG = getattr(settings, 'SITECONFIG_CONFIG', {})
-
 
 class ConfigRegistry():
 

@@ -25,7 +25,8 @@ class SiteConfigMixin(object):
 class ModelsBaiscMixin(object):
     def load_models(self):
         self.sites = []
-        site = self.site_config.backends.model_backend.models.WebSite(name="JOE SITE", slug='joe')
+        self.site1_slug = "joe"
+        site = self.site_config.backends.model_backend.models.WebSite(name="JOE SITE", slug=self.site1_slug)
         site.save()
         self.sites.append(site)
 
@@ -37,15 +38,10 @@ class ModelsBaiscMixin(object):
         
         self.apps = []
         app = self.site_config.backends.model_backend.models.Application(
-                                    name="Formfun", slug='formfun', active=True)
+                                    name="My Application", slug='myapp', active=True)
         app.save()
         self.apps.append(app)
 
-        self.apps = []
-        app = self.site_config.backends.model_backend.models.Application(
-                                    name="DJhelper", slug='djhelper', active=True)
-        app.save()
-        self.apps.append(app)
 
         webapp = self.site_config.backends.model_backend.models.WebSiteApplication(
                                     website=self.sites[0], application=self.apps[0],
@@ -54,8 +50,9 @@ class ModelsBaiscMixin(object):
         self.webapps = []
         self.webapps.append(webapp)
 
+
 @override_settings(**utils.settings_overrides)
-class TestConfigRegistry(SiteConfigMixin, TestCase):
+class TestSiteConfigRegistry(SiteConfigMixin, TestCase):
     def setUp(self):
         self.load_config()
 
@@ -74,20 +71,51 @@ class TestConfigRegistry(SiteConfigMixin, TestCase):
         self.assertEqual(config_class.application_slug, 
                          self.MyAppSiteConfig.application_slug) 
     
+    def test_get_settings_backend(self):
+        self.assertEqual(self.site_config.settings.BACKEND, 
+                         utils.settings_overrides['SITECONFIG_BACKEND'])
+
 
 @override_settings(**utils.settings_overrides)
-class TestConfigBasic(ModelsBaiscMixin, SiteConfigMixin, TestCase):
+class TestConfigBasicAccess(ModelsBaiscMixin, SiteConfigMixin, TestCase):
+    
     def setUp(self):
         self.load_config()
         self.load_models()
         self.site_config.settings.config_registry.register(self.MyAppSiteConfig)
         
     def test_attributeA_access(self):
-        siteconfig = self.MyAppSiteConfig(self.MyAppSiteConfig.application_slug)
+        siteconfig = self.MyAppSiteConfig(website=self.site1_slug)
         self.assertEqual(siteconfig.TEST_A, "Test A default")
 
     def test_attributeB_access(self):
-        siteconfig = self.MyAppSiteConfig(self.MyAppSiteConfig.application_slug)        
+        siteconfig = self.MyAppSiteConfig(website=self.site1_slug)
         self.assertEqual(siteconfig.TEST_B, 1)
         self.assertNotEqual(siteconfig.TEST_B, "1")
 
+    def test_get_config_A(self):
+        siteconfig = self.MyAppSiteConfig(website=self.site1_slug)
+        self.assertEqual(siteconfig.get_config("TEST_A")['value'], "Test A default")
+
+    def test_get_config_B(self):
+        siteconfig = self.MyAppSiteConfig(website=self.site1_slug)
+        self.assertEqual(siteconfig.get_config("TEST_B")['value'], 1)
+
+    def test_set_config_A(self):
+        siteconfig = self.MyAppSiteConfig(website=self.site1_slug)
+        siteconfig.set_config("TEST_A", "JOE")
+        self.assertEqual(siteconfig.get_config("TEST_A")['value'], "JOE")
+        self.assertEqual(siteconfig.TEST_A, "JOE")
+
+    def test_set_config_B(self):
+        siteconfig = self.MyAppSiteConfig(website=self.site1_slug)
+        siteconfig.set_config("TEST_B", 666)
+        self.assertEqual(siteconfig.get_config("TEST_B")['value'], 666)
+        self.assertEqual(siteconfig.TEST_B, 666)
+    
+    def test_invalid_attribute(self):
+        siteconfig = self.MyAppSiteConfig(website=self.site1_slug)
+        self.assertFalse(hasattr(siteconfig, 'TEST_C'))
+        
+        
+        
