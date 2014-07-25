@@ -33,7 +33,7 @@ class DatabaseBackend(ConfigBackend):
     def mset(self, config_dict, application_slug, website=None):
         try:
             site_app = models.WebSiteApplication.objects.get(
-                                application__slug=application_slug, website=website)
+                                application__slug=application_slug, website__slug=website)
             site_app.set_config_options(config_dict)
         except models.WebSiteApplication.DoesNotExist:
             raise 

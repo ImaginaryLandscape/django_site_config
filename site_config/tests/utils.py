@@ -10,4 +10,5 @@ settings_overrides = dict(
         'site_config',
         'site_config.backends.model_backend',
     ),
+    SITECONFIG_BACKEND = 'site_config.backends.model_backend.DatabaseBackend',
 )
