@@ -52,7 +52,17 @@ See the example below
     c = FormbundleConfig(website="stjoseph")
     c.TEST_A
     c.TEST_B
-    
+
+
+# TEMPLATE OVERRIDES
+
+You can override the template below to customize the curtain
+page that displays when a Website Application as marked as
+"curtained".  Note, the default template extends "base.html"
+so this will need to be present in your application. 
+
+   site_config/curtained.html
+
     
 # TESTING
 
