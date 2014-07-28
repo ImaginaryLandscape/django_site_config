@@ -55,8 +55,10 @@ class ConfigBackend(object):
         """
         raise NotImplementedError
 
-    def is_website_application_active(application_short_name, website_short_name):
+    def website_application_status(application_short_name, website_short_name):
         """
-        This returns whether or not the provided website application is active. 
+        This returns whether or not the provided website application is active,
+        is disabled, or is curtained. 
+        It returns one of the strings defined in choices.WEBAPP_ACTIVE_STATES
         """
         raise NotImplementedError

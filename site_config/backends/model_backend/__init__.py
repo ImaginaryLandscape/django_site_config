@@ -38,7 +38,7 @@ class DatabaseBackend(ConfigBackend):
             raise 
         return site_app
     
-    def is_website_application_active(self, application_short_name, website_short_name):
+    def website_application_status(self, application_short_name, website_short_name):
         active = choices.WEBAPP_ACTIVE_STATE_DISABLED
         site_app_list = models.WebsiteApplication.objects.website_applications(
                         website_short_name=website_short_name, application_short_name=application_short_name, 

@@ -155,32 +155,32 @@ class TestConfigActive(ModelsBaiscMixin, SiteConfigMixin, TestCase):
         self.load_models()
         self.site_config.settings.config_registry.register(self.MyAppSiteConfig)
         
-    def test_is_website_application_active__all_active(self):
+    def test_website_application_status__all_active(self):
         siteconfig = self.MyAppSiteConfig(website=self.site1_short_name)
         self._set_model_active_state(True, True, "enabled")
-        self.assertEqual(siteconfig.is_website_application_active(), "enabled")
+        self.assertEqual(siteconfig.website_application_status(), "enabled")
 
-    def test_is_website_application_active__incorrect_status(self):
+    def test_website_application_status__incorrect_status(self):
         siteconfig = self.MyAppSiteConfig(website=self.site1_short_name)
         self._set_model_active_state(True, True, "incorrect_status")
-        self.assertEqual(siteconfig.is_website_application_active(), "disabled")
+        self.assertEqual(siteconfig.website_application_status(), "disabled")
 
-    def test_is_website_application_active__app_and_siteapp_active(self):
+    def test_website_application_status__app_and_siteapp_active(self):
         siteconfig = self.MyAppSiteConfig(website=self.site1_short_name)
         self._set_model_active_state(False, True, "enabled")
-        self.assertEqual(siteconfig.is_website_application_active(), "disabled")
+        self.assertEqual(siteconfig.website_application_status(), "disabled")
 
-    def test_is_website_application_active__wesite_and_siteapp_active(self):
+    def test_website_application_status__wesite_and_siteapp_active(self):
         siteconfig = self.MyAppSiteConfig(website=self.site1_short_name)
         self._set_model_active_state(True, False, "enabled")
-        self.assertEqual(siteconfig.is_website_application_active(), "disabled")
+        self.assertEqual(siteconfig.website_application_status(), "disabled")
 
-    def test_is_website_application_active__siteapp_active(self):
+    def test_website_application_status__siteapp_active(self):
         siteconfig = self.MyAppSiteConfig(website=self.site1_short_name)
         self._set_model_active_state(False, False, "enabled")
-        self.assertEqual(siteconfig.is_website_application_active(), "disabled")
+        self.assertEqual(siteconfig.website_application_status(), "disabled")
 
-    def test_is_website_application_active__nothing_active(self):
+    def test_website_application_status__nothing_active(self):
         siteconfig = self.MyAppSiteConfig(website=self.site1_short_name)
         self._set_model_active_state(False, False, "disabled")
-        self.assertEqual(siteconfig.is_website_application_active(), "disabled")
+        self.assertEqual(siteconfig.website_application_status(), "disabled")

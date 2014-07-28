@@ -13,7 +13,7 @@ def determine_website(the_func, config_class):
     def _decorated(*args, **kwargs):
         website = kwargs.get('website', None)
         app_config = config_class(website=website)
-        active_state = app_config.is_website_application_active()
+        active_state = app_config.website_application_status()
         if active_state == choices.WEBAPP_ACTIVE_STATE_CURTAINED:
             if args[0].user.is_authenticated() and args[0].user.is_superuser:
                 pass

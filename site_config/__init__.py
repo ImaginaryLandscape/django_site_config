@@ -90,8 +90,8 @@ class SiteConfigBase(object):
     def set_config(self, key, value,):
         self._backend.set(key, value, self.get_default_configs(), self.application_short_name, self.website)
     
-    def is_website_application_active(self):
-        return self._backend.is_website_application_active(self.application_short_name, self.website)
+    def website_application_status(self):
+        return self._backend.website_application_status(self.application_short_name, self.website)
     
     def get_curtain_message(self):
         return ""
