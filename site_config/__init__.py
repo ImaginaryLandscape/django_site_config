@@ -93,6 +93,9 @@ class SiteConfigBase(object):
     def is_website_application_active(self):
         return self._backend.is_website_application_active(self.application_short_name, self.website)
     
+    def get_curtain_message(self):
+        return ""
+    
     def __dir__(self):
         return self.get_default_configs().keys()
     

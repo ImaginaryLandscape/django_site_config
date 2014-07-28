@@ -100,7 +100,7 @@ class WebsiteApplication(models.Model):
         if save:
             self.save()
 
-    def is_active(self):
+    def active_status(self):
         return_value = choices.WEBAPP_ACTIVE_STATE_DISABLED
         if self.website.active and self.application.active and \
            self.active in [choices.WEBAPP_ACTIVE_STATE_ENABLED, 

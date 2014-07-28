@@ -45,5 +45,5 @@ class DatabaseBackend(ConfigBackend):
                         )
         if site_app_list.count() == 1:
             site_app = site_app_list[0]
-            active = site_app.is_active()
+            active = site_app.active_status()
         return active
