@@ -1,6 +1,6 @@
 from __future__ import unicode_literals
 import logging
-from site_config import utils
+from site_config import utils, choices
 from .. import ConfigBackend
 from . import models
 
@@ -39,7 +39,7 @@ class DatabaseBackend(ConfigBackend):
         return site_app
     
     def is_website_application_active(self, application_slug, website_slug):
-        active = False
+        active = choices.WEBAPP_ACTIVE_STATE_DISABLED
         site_app_list = models.WebSiteApplication.objects.website_applications(
                         website_slug=website_slug, application_slug=application_slug, 
                         )

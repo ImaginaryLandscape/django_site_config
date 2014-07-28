@@ -3,8 +3,8 @@ import site_config
 
 class FooConfig(site_config.SiteConfigBase):
 
-    application_slug = "bar"
-    application_verbose_name = "Bar App"
+    application_slug = "foo"
+    application_verbose_name = "Foo App"
 
     def get_default_configs(self):
         return {'FOO_EMAIL':{'default':"joe@exampe.com",

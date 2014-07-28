@@ -4,7 +4,7 @@ from jsonfield import JSONField
 from django.utils.encoding import python_2_unicode_compatible
 from django.db import models
 from django.db.models.signals import post_save
-from site_config import utils
+from site_config import utils, choices
 
 logger = logging.getLogger(__name__)
 
@@ -77,10 +77,13 @@ class WebSiteApplication(models.Model):
     website = models.ForeignKey('site_config.WebSite')
     application = models.ForeignKey('site_config.Application')
     
-    active = models.BooleanField(default=False, 
-        help_text="Activates or deactivates this website application combination. "
-        "In order for this to be active, both the corresponding "
-        "website and application must also be active.")
+    active = models.CharField(max_length=20,
+        default=choices.WEBAPP_ACTIVE_STATE_DISABLED,
+        choices=choices.WEBAPP_ACTIVE_STATES,
+        help_text="Activates, curtains or deactivates this website application "
+        "combination. In order for this to be active, both the corresponding "
+        "website and application must also be active.  Curtained sites can "
+        "only be viewed by superusers.")
     description = models.TextField(blank=True, null=True)
 
     options = JSONField(blank=True, null=True)
@@ -96,7 +99,9 @@ class WebSiteApplication(models.Model):
             self.save()
 
     def is_active(self):
-        return_value =  self.website.active & self.application.active & self.active
+        return_value = choices.WEBAPP_ACTIVE_STATE_DISABLED
+        if self.website.active & self.application.active:
+            return_value = self.active
         return return_value
 
     class Meta:

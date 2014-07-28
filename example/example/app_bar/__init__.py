@@ -5,8 +5,8 @@ import site_config
 
 class BarConfig(site_config.SiteConfigBase):
 
-    application_slug = "foo"
-    application_verbose_name = "Foo App"
+    application_slug = "bar"
+    application_verbose_name = "Bar App"
 
     def get_default_configs(self):
         return {'BAR_EMAIL':{'default':"joe@exampe.com", 
