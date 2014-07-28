@@ -159,7 +159,12 @@ class TestConfigActive(ModelsBaiscMixin, SiteConfigMixin, TestCase):
         siteconfig = self.MyAppSiteConfig(website=self.site1_slug)
         self._set_model_active_state(True, True, "enabled")
         self.assertEqual(siteconfig.is_website_application_active(), "enabled")
-    
+
+    def test_is_website_application_active__incorrect_status(self):
+        siteconfig = self.MyAppSiteConfig(website=self.site1_slug)
+        self._set_model_active_state(True, True, "incorrect_status")
+        self.assertEqual(siteconfig.is_website_application_active(), "disabled")
+
     def test_is_website_application_active__app_and_siteapp_active(self):
         siteconfig = self.MyAppSiteConfig(website=self.site1_slug)
         self._set_model_active_state(False, True, "enabled")
