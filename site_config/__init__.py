@@ -89,7 +89,10 @@ class SiteConfigBase(object):
     
     def set_config(self, key, value,):
         self._backend.set(key, value, self.get_default_configs(), self.application_slug, self.website)
-        
+    
+    def is_website_application_active(self):
+        return self._backend.is_website_application_active(self.application_slug, self.website)
+    
     def __dir__(self):
         return self.get_default_configs().keys()
     

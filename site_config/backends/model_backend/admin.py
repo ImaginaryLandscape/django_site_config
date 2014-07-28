@@ -39,10 +39,9 @@ class ApplicationAdminForm(forms.ModelForm):
 class ApplicationAdmin(admin.ModelAdmin):
     form = ApplicationAdminForm
     inlines = [WebSiteApplicationInline,]    
-    list_display=['id', 'name', 'slug', 'active',]
+    list_display=['id', 'slug', 'active',]
     list_editable=['active',]
     list_filter=['active']
-    prepopulated_fields = {"slug": ("name",)}
 
 
 class WebSiteApplicationAdmin(admin.ModelAdmin):

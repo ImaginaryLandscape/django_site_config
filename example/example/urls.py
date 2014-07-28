@@ -6,7 +6,8 @@ admin.autodiscover()
 
 urlpatterns = patterns('',
     url(r'^$', TemplateView.as_view(template_name='index.html'), {}, name="index"),                       
-    url(r'^app1/$', include('example.app1.urls')),
     url(r'^admin/', include(admin.site.urls)),
+    url(r'^(?P<website>\w+)/foo/$', include('example.app_foo.urls')),
+    url(r'^(?P<website>\w+)/bar/$', include('example.app_bar.urls')),
 )
 

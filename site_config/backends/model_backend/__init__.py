@@ -37,3 +37,13 @@ class DatabaseBackend(ConfigBackend):
         except models.WebSiteApplication.DoesNotExist:
             raise 
         return site_app
+    
+    def is_website_application_active(self, application_slug, website_slug):
+        active = False
+        site_app_list = models.WebSiteApplication.objects.website_applications(
+                        website_slug=website_slug, application_slug=application_slug, 
+                        )
+        if site_app_list.count() == 1:
+            site_app = site_app_list[0]
+            active = site_app.is_active()
+        return active

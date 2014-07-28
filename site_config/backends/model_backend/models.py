@@ -11,9 +11,13 @@ logger = logging.getLogger(__name__)
 @python_2_unicode_compatible
 class WebSite(models.Model):
     
-    name = models.CharField(max_length=64)
-    slug = models.SlugField(max_length=64, unique=True)
-    active = models.BooleanField(default=False)
+    name = models.CharField(max_length=64, 
+        help_text="Enter a descriptive name for this website.")
+    slug = models.SlugField(max_length=64, unique=True, 
+        help_text="This must be a unique name using only "
+                  "letter, numbers, hyphens, and underscores.")
+    active = models.BooleanField(default=False, 
+        help_text="Enable or disable the entire website.")
     description = models.TextField(blank=True, null=True)
 
     class Meta:
@@ -28,9 +32,11 @@ class WebSite(models.Model):
 @python_2_unicode_compatible
 class Application(models.Model):
 
-    name = models.CharField(max_length=64)
-    slug = models.SlugField(max_length=64, unique=True)
-    active = models.BooleanField(default=False)
+    slug = models.SlugField(max_length=64, unique=True,
+        help_text="This must be a unique name using only "
+                  "letter, numbers, hyphens, and underscores.")
+    active = models.BooleanField(default=False, 
+        help_text="Enable or disable the entire application.")
     description = models.TextField(blank=True, null=True)
 
     class Meta:
@@ -39,7 +45,7 @@ class Application(models.Model):
         verbose_name_plural = "Applications"
 
     def __str__(self):
-        return "%s (%s)" % (self.name, self.slug)
+        return "%s" % (self.slug)
 
 
 class WebSiteApplicationQuerySet(models.query.QuerySet):
@@ -85,6 +91,10 @@ class WebSiteApplication(models.Model):
         self.options = config_dict
         if save:
             self.save()
+
+    def is_active(self):
+        return_value =  self.website.active & self.application.active & self.active
+        return return_value
 
     class Meta:
         app_label = 'site_config'

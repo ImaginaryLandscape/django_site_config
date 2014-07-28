@@ -54,3 +54,9 @@ class ConfigBackend(object):
         This saves all of the config values to the backend.
         """
         raise NotImplementedError
+
+    def is_website_application_active(application_slug, website_slug):
+        """
+        This returns whether or not the provided website application is active. 
+        """
+        raise NotImplementedError

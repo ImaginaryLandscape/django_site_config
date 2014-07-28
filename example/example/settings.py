@@ -42,7 +42,8 @@ INSTALLED_APPS = (
     'site_config',
     'site_config.backends.model_backend',
 
-    'example.app1',
+    'example.app_foo',
+    'example.app_bar',
 
 )
 

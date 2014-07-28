@@ -29,27 +29,36 @@ class SiteConfigMixin(object):
 class ModelsBaiscMixin(object):
 
     def load_models(self):
+        self.WebSite = self.site_config.backends.model_backend.models.WebSite
+        self.Application = self.site_config.backends.model_backend.models.Application
+        self.WebSiteApplication = self.site_config.backends.model_backend.models.WebSiteApplication
+        
         self.sites = []
         self.site1_slug = "joe"
-        site = self.site_config.backends.model_backend.models.WebSite(name="JOE SITE", slug=self.site1_slug)
+        site = self.WebSite(
+            name="JOE SITE", slug=self.site1_slug,
+            active=True)
         site.save()
         self.sites.append(site)
 
-        site = self.site_config.backends.model_backend.models.WebSite(
-                                    name="John Site", slug='john', active=True)
+        self.site2_slug = "john"
+        site = self.WebSite(
+            name="John Site", slug=self.site2_slug, 
+            active=False)
         site.save()
         self.sites.append(site)
         
         self.apps = []
-        app = self.site_config.backends.model_backend.models.Application(
-                                    name="My Application", slug='myapp', active=True)
+        self.app1_slug = 'myapp'
+        app = self.Application(
+            name="My Application", slug=self.app1_slug, 
+            active=True)
         app.save()
         self.apps.append(app)
 
-
-        webapp = self.site_config.backends.model_backend.models.WebSiteApplication(
-                                    website=self.sites[0], application=self.apps[0],
-                                    active=True)
+        webapp = self.WebSiteApplication(
+            website=self.sites[0], application=self.apps[0],
+            active=True)
         webapp.save()
         self.webapps = []
         self.webapps.append(webapp)
@@ -133,4 +142,42 @@ class TestConfigBasicAccess(ModelsBaiscMixin, SiteConfigMixin, TestCase):
         siteconfig = self.MyAppSiteConfig(website=self.site1_slug)
         self.assertFalse(hasattr(siteconfig, 'TEST_C'))
         
+
+
+@override_settings(**utils.settings_overrides)
+class TestConfigActive(ModelsBaiscMixin, SiteConfigMixin, TestCase):
+    
+    def _set_model_active_state(self, website, application, webapp):
+        self.WebSite.objects.filter().update(active=website)
+        self.Application.objects.filter().update(active=application)
+        self.WebSiteApplication.objects.filter().update(active=webapp)
+
+    def setUp(self):
+        self.load_config()
+        self.load_models()
+        self.site_config.settings.config_registry.register(self.MyAppSiteConfig)
         
+    def test_is_website_application_active__all_active(self):
+        siteconfig = self.MyAppSiteConfig(website=self.site1_slug)
+        self._set_model_active_state(True, True, True)
+        self.assertTrue(siteconfig.is_website_application_active())
+    
+    def test_is_website_application_active__app_and_siteapp_active(self):
+        siteconfig = self.MyAppSiteConfig(website=self.site1_slug)
+        self._set_model_active_state(False, True, True)
+        self.assertFalse(siteconfig.is_website_application_active())
+
+    def test_is_website_application_active__wesite_and_siteapp_active(self):
+        siteconfig = self.MyAppSiteConfig(website=self.site1_slug)
+        self._set_model_active_state(True, False, True)
+        self.assertFalse(siteconfig.is_website_application_active())
+
+    def test_is_website_application_active__siteapp_active(self):
+        siteconfig = self.MyAppSiteConfig(website=self.site1_slug)
+        self._set_model_active_state(False, False, True)
+        self.assertFalse(siteconfig.is_website_application_active())
+
+    def test_is_website_application_active__nothing_active(self):
+        siteconfig = self.MyAppSiteConfig(website=self.site1_slug)
+        self._set_model_active_state(False, False, False)
+        self.assertFalse(siteconfig.is_website_application_active())
