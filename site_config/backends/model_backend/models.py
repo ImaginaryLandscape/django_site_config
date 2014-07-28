@@ -9,7 +9,7 @@ from site_config import utils, choices
 logger = logging.getLogger(__name__)
 
 @python_2_unicode_compatible
-class WebSite(models.Model):
+class Website(models.Model):
     
     name = models.CharField(max_length=64, 
         help_text="Enter a descriptive name for this website.")
@@ -48,7 +48,7 @@ class Application(models.Model):
         return "%s" % (self.slug)
 
 
-class WebSiteApplicationQuerySet(models.query.QuerySet):
+class WebsiteApplicationQuerySet(models.query.QuerySet):
     
     def active(self):
         return self.filter(active=True)
@@ -59,10 +59,10 @@ class WebSiteApplicationQuerySet(models.query.QuerySet):
                         website__slug=website_slug, )
 
 
-class WebSiteApplicationManager(models.Manager):
+class WebsiteApplicationManager(models.Manager):
     
     def get_queryset(self):
-        return WebSiteApplicationQuerySet(self.model, using=self._db)
+        return WebsiteApplicationQuerySet(self.model, using=self._db)
     
     def __getattr__(self, attr, *args):
         try:
@@ -72,9 +72,9 @@ class WebSiteApplicationManager(models.Manager):
         
 
 @python_2_unicode_compatible
-class WebSiteApplication(models.Model):
+class WebsiteApplication(models.Model):
     
-    website = models.ForeignKey('site_config.WebSite')
+    website = models.ForeignKey('site_config.Website')
     application = models.ForeignKey('site_config.Application')
     
     active = models.CharField(max_length=20,
@@ -88,7 +88,7 @@ class WebSiteApplication(models.Model):
 
     options = JSONField(blank=True, null=True)
     
-    objects = WebSiteApplicationManager()
+    objects = WebsiteApplicationManager()
     
     def get_config_options(self, default_config_dict):
         return utils.update_config_dict(default_config_dict, self.options)

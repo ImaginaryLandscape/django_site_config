@@ -29,20 +29,20 @@ class SiteConfigMixin(object):
 class ModelsBaiscMixin(object):
 
     def load_models(self):
-        self.WebSite = self.site_config.backends.model_backend.models.WebSite
+        self.Website = self.site_config.backends.model_backend.models.Website
         self.Application = self.site_config.backends.model_backend.models.Application
-        self.WebSiteApplication = self.site_config.backends.model_backend.models.WebSiteApplication
+        self.WebsiteApplication = self.site_config.backends.model_backend.models.WebsiteApplication
         
         self.sites = []
         self.site1_slug = "joe"
-        site = self.WebSite(
+        site = self.Website(
             name="JOE SITE", slug=self.site1_slug,
             active=True)
         site.save()
         self.sites.append(site)
 
         self.site2_slug = "john"
-        site = self.WebSite(
+        site = self.Website(
             name="John Site", slug=self.site2_slug, 
             active=False)
         site.save()
@@ -54,7 +54,7 @@ class ModelsBaiscMixin(object):
         app.save()
         self.apps.append(app)
 
-        webapp = self.WebSiteApplication(
+        webapp = self.WebsiteApplication(
             website=self.sites[0], application=self.apps[0],
             active="enabled")
         webapp.save()
@@ -146,9 +146,9 @@ class TestConfigBasicAccess(ModelsBaiscMixin, SiteConfigMixin, TestCase):
 class TestConfigActive(ModelsBaiscMixin, SiteConfigMixin, TestCase):
     
     def _set_model_active_state(self, website, application, webapp):
-        self.WebSite.objects.filter().update(active=website)
+        self.Website.objects.filter().update(active=website)
         self.Application.objects.filter().update(active=application)
-        self.WebSiteApplication.objects.filter().update(active=webapp)
+        self.WebsiteApplication.objects.filter().update(active=webapp)
 
     def setUp(self):
         self.load_config()

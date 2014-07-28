@@ -7,20 +7,20 @@ from . import models
 from . import forms as backend_forms
 
 
-class WebSiteApplicationInline(admin.StackedInline):
+class WebsiteApplicationInline(admin.StackedInline):
     def detail_link(self, obj):
         return "<a href='%s'>detail</a>" % (reverse('admin:site_config_websiteapplication_change', args=(obj.id,)))
     detail_link.short_description = 'Link to Detail Page'
     detail_link.allow_tags = True
     
-    model = models.WebSiteApplication
+    model = models.WebsiteApplication
     exclude = ['options']
     readonly_fields = ['detail_link']
     extra = 0
 
 
-class WebSiteAdmin(admin.ModelAdmin):
-    inlines = [WebSiteApplicationInline,]
+class WebsiteAdmin(admin.ModelAdmin):
+    inlines = [WebsiteApplicationInline,]
     list_display=['id', 'name', 'slug', 'active', ]
     list_editable = ['active',]
     list_filter=['active']
@@ -38,13 +38,13 @@ class ApplicationAdminForm(forms.ModelForm):
 
 class ApplicationAdmin(admin.ModelAdmin):
     form = ApplicationAdminForm
-    inlines = [WebSiteApplicationInline,]    
+    inlines = [WebsiteApplicationInline,]    
     list_display=['id', 'slug', 'active',]
     list_editable=['active',]
     list_filter=['active']
 
 
-class WebSiteApplicationAdmin(admin.ModelAdmin):
+class WebsiteApplicationAdmin(admin.ModelAdmin):
 
     def application_active(self, obj):
         return True if obj.application.active else False
@@ -98,7 +98,7 @@ class WebSiteApplicationAdmin(admin.ModelAdmin):
         obj.save()
 
 
-admin.site.register(models.WebSite, WebSiteAdmin)
+admin.site.register(models.Website, WebsiteAdmin)
 admin.site.register(models.Application, ApplicationAdmin)
-admin.site.register(models.WebSiteApplication, WebSiteApplicationAdmin)
+admin.site.register(models.WebsiteApplication, WebsiteApplicationAdmin)
 

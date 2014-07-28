@@ -9,7 +9,7 @@ logger = logging.getLogger(__name__)
 def website_application_formfactory(instance=None):
     config_class = None
     meta_options = {
-         "model":models.WebSiteApplication, 
+         "model":models.WebsiteApplication, 
          'exclude':['options',],
     }
     properties = {"Meta": type(b'Meta', (), meta_options)}
@@ -52,5 +52,5 @@ def website_application_formfactory(instance=None):
         return cleaned_data
     
     properties.update({"config_fields": config_fields, 'clean':clean_form})
-    form = type(b'WebSiteApplicationAdminForm', (forms.ModelForm,), properties)
+    form = type(b'WebsiteApplicationAdminForm', (forms.ModelForm,), properties)
     return form
