@@ -20,11 +20,12 @@ class WebsiteApplicationInline(admin.TabularInline):
 
 
 class WebsiteAdmin(admin.ModelAdmin):
-    inlines = [WebsiteApplicationInline,]
+    #inlines = [WebsiteApplicationInline,]
     list_display=['id', 'name', 'short_name', 'active', ]
     list_editable = ['active',]
     list_filter=['active']
     prepopulated_fields = {"short_name": ("name",)}
+    ordering = ['short_name']
 
 
 class ApplicationAdminForm(forms.ModelForm):
@@ -42,6 +43,7 @@ class ApplicationAdmin(admin.ModelAdmin):
     list_display=['id', 'short_name', 'active',]
     list_editable=['active',]
     list_filter=['active']
+    ordering = ['short_name']
 
 
 class WebsiteApplicationAdmin(admin.ModelAdmin):

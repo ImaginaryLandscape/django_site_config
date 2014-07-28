@@ -17,7 +17,7 @@
   </thead>
   <tbody>
   	{% for webapp in original.websiteapplication_set.all %}
-    <tr class="form-row row1 has_original dynamic-websiteapplication_set">
+    <tr class="form-row has_original dynamic-websiteapplication_set {% cycle 'row1' 'row2' %}">
         <td class="original">
           <p><a href="{% url 'admin:site_config_websiteapplication_change' webapp.id %}">{{ webapp.id }}</a></p>
         </td>
@@ -32,9 +32,10 @@
         </td>
         <td class="original">
           <p><a href="{% url 'admin:site_config_websiteapplication_change' webapp.id %}">View</a></p>
-        </td>        
+        </td>
     </tr>
     {% endfor %}
+    <tr class="add-row"><td colspan="5"><a href="{% url 'admin:site_config_websiteapplication_add' %}">Add another Website Application</a></td></tr>
   	
   </tbody>
 </table>

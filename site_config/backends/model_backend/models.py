@@ -24,6 +24,7 @@ class Website(models.Model):
         app_label = 'site_config'
         verbose_name = "Website"
         verbose_name_plural = "Websites"
+        ordering = ['short_name']
 
     def __str__(self):
         return "%s (%s)" % (self.name, self.short_name)
@@ -43,6 +44,7 @@ class Application(models.Model):
         app_label = 'site_config'
         verbose_name = "Application"
         verbose_name_plural = "Applications"
+        ordering = ['short_name']
 
     def __str__(self):
         return "%s" % (self.short_name)
