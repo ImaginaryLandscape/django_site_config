@@ -1,0 +1,43 @@
+{% extends "admin/change_form.html" %}
+
+
+{% block after_related_objects %}{{ block.super }}
+{% if original %}
+<fieldset class="module">
+<h2>Website Applications</h2>
+<table>
+  <thead>
+  	<tr>
+  		<th>ID</th>
+  		<th>Application</th>
+  		<th>Active</th>
+  		<th>Description</th>
+  		<th></th>   		
+  	</tr>
+  </thead>
+  <tbody>
+  	{% for webapp in original.websiteapplication_set.all %}
+    <tr class="form-row row1 has_original dynamic-websiteapplication_set">
+        <td class="original">
+          <p><a href="{% url 'admin:site_config_websiteapplication_change' webapp.id %}">{{ webapp.id }}</a></p>
+        </td>
+        <td>
+          <p>{{ webapp.website }}</p>
+        </td>        
+        <td>
+          <p>{{ webapp.get_active_display }}</p>
+        </td>
+        <td class="field-description">
+          <p>{{ webapp.description }}</p>
+        </td>
+        <td class="original">
+          <p><a href="{% url 'admin:site_config_websiteapplication_change' webapp.id %}">View</a></p>
+        </td>        
+    </tr>
+    {% endfor %}
+  	
+  </tbody>
+</table>
+</fieldset>
+{% endif %}
+{% endblock %}

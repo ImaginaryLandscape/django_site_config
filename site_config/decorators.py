@@ -18,12 +18,12 @@ def determine_website(the_func, config_class):
             if args[0].user.is_authenticated() and args[0].user.is_superuser:
                 pass
             else:
-                logger.debug("Website Application curtained %s - %s" % (website, app_config.application_slug))
+                logger.debug("Website Application curtained %s - %s" % (website, app_config.application_short_name))
                 return HttpResponseNotFound(render_to_string("site_config/curtained.html", {}))
         elif active_state == choices.WEBAPP_ACTIVE_STATE_ENABLED:
             pass
         else:
-            logger.debug("Website Application disabled %s - %s" % (website, app_config.application_slug))
+            logger.debug("Website Application disabled %s - %s" % (website, app_config.application_short_name))
             raise Http404
         return the_func(*args, **kwargs)
     return _decorated

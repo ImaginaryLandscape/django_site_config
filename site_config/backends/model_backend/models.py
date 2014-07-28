@@ -13,7 +13,7 @@ class Website(models.Model):
     
     name = models.CharField(max_length=64, 
         help_text="Enter a descriptive name for this website.")
-    slug = models.SlugField(max_length=64, unique=True, 
+    short_name = models.SlugField(max_length=64, unique=True, 
         help_text="This must be a unique name using only "
                   "letter, numbers, hyphens, and underscores.")
     active = models.BooleanField(default=False, 
@@ -26,13 +26,13 @@ class Website(models.Model):
         verbose_name_plural = "Websites"
 
     def __str__(self):
-        return "%s (%s)" % (self.name, self.slug)
+        return "%s (%s)" % (self.name, self.short_name)
 
 
 @python_2_unicode_compatible
 class Application(models.Model):
 
-    slug = models.SlugField(max_length=64, unique=True,
+    short_name = models.SlugField(max_length=64, unique=True,
         help_text="This must be a unique name using only "
                   "letter, numbers, hyphens, and underscores.")
     active = models.BooleanField(default=False, 
@@ -45,7 +45,7 @@ class Application(models.Model):
         verbose_name_plural = "Applications"
 
     def __str__(self):
-        return "%s" % (self.slug)
+        return "%s" % (self.short_name)
 
 
 class WebsiteApplicationQuerySet(models.query.QuerySet):
@@ -53,10 +53,10 @@ class WebsiteApplicationQuerySet(models.query.QuerySet):
     def active(self):
         return self.filter(active=True)
 
-    def website_applications(self, website_slug, application_slug):
+    def website_applications(self, website_short_name, application_short_name):
         return self.filter(
-                        application__slug=application_slug, 
-                        website__slug=website_slug, )
+                        application__short_name=application_short_name, 
+                        website__short_name=website_short_name, )
 
 
 class WebsiteApplicationManager(models.Manager):

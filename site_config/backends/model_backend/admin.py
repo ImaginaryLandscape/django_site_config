@@ -7,7 +7,7 @@ from . import models
 from . import forms as backend_forms
 
 
-class WebsiteApplicationInline(admin.StackedInline):
+class WebsiteApplicationInline(admin.TabularInline):
     def detail_link(self, obj):
         return "<a href='%s'>detail</a>" % (reverse('admin:site_config_websiteapplication_change', args=(obj.id,)))
     detail_link.short_description = 'Link to Detail Page'
@@ -21,25 +21,25 @@ class WebsiteApplicationInline(admin.StackedInline):
 
 class WebsiteAdmin(admin.ModelAdmin):
     inlines = [WebsiteApplicationInline,]
-    list_display=['id', 'name', 'slug', 'active', ]
+    list_display=['id', 'name', 'short_name', 'active', ]
     list_editable = ['active',]
     list_filter=['active']
-    prepopulated_fields = {"slug": ("name",)}
+    prepopulated_fields = {"short_name": ("name",)}
 
 
 class ApplicationAdminForm(forms.ModelForm):
     
     def __init__(self, *args, **kwargs):
         super(ApplicationAdminForm, self).__init__(*args, **kwargs)
-        self.fields['slug'] = forms.ChoiceField(choices=settings.config_registry.get_config_list())
+        self.fields['short_name'] = forms.ChoiceField(choices=settings.config_registry.get_config_list())
     
     class Meta:
         model = models.Application
 
 class ApplicationAdmin(admin.ModelAdmin):
     form = ApplicationAdminForm
-    inlines = [WebsiteApplicationInline,]    
-    list_display=['id', 'slug', 'active',]
+    #inlines = [WebsiteApplicationInline,]    
+    list_display=['id', 'short_name', 'active',]
     list_editable=['active',]
     list_filter=['active']
 

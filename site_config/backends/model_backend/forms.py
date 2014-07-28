@@ -17,10 +17,10 @@ def website_application_formfactory(instance=None):
     config_fields = []
     # only add config options for existing objects
     if instance:
-        # lookup the configuration class for this object, based on the application slug
-        config_lookup = settings.config_registry.get_config_class(instance.application.slug)
+        # lookup the configuration class for this object, based on the application short_name
+        config_lookup = settings.config_registry.get_config_class(instance.application.short_name)
         if config_lookup:
-            config_class = config_lookup[1](website=instance.website.slug)
+            config_class = config_lookup[1](website=instance.website.short_name)
             config_fields = []
             for config_name, lookup_dict in config_class.get_configs().items():
                 config_fields.append(config_name)

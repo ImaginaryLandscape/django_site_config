@@ -9,7 +9,7 @@ logger = logging.getLogger(__name__)
 
 class SiteConfigBase(object):
     
-    application_slug = "default_application"
+    application_short_name = "default_application"
     application_verbose_name = "Default Application"
     
     def get_default_configs(self):
@@ -64,7 +64,7 @@ class SiteConfigBase(object):
                            'help':'Test A help text.', 'value':"looked-up value A"}
         """
         result = self._backend.get(key, self.get_default_configs(), 
-                                   self.application_slug, self.website, )
+                                   self.application_short_name, self.website, )
         return result
     
     def get_configs(self):
@@ -85,13 +85,13 @@ class SiteConfigBase(object):
                               'help':'Test B help text.', 
                               'value':"looked-up value B"}}
         """
-        return self._backend.mget(self.get_default_configs(), self.application_slug, self.website)
+        return self._backend.mget(self.get_default_configs(), self.application_short_name, self.website)
     
     def set_config(self, key, value,):
-        self._backend.set(key, value, self.get_default_configs(), self.application_slug, self.website)
+        self._backend.set(key, value, self.get_default_configs(), self.application_short_name, self.website)
     
     def is_website_application_active(self):
-        return self._backend.is_website_application_active(self.application_slug, self.website)
+        return self._backend.is_website_application_active(self.application_short_name, self.website)
     
     def __dir__(self):
         return self.get_default_configs().keys()

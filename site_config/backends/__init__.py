@@ -3,7 +3,7 @@ from __future__ import unicode_literals
 
 class ConfigBackend(object):
 
-    def get(self, key, config_dict, application_slug, website_slug=None):
+    def get(self, key, config_dict, application_short_name, website_short_name=None):
         """
         Get the key from the backend store and return the value.
         Return None if not found.
@@ -19,7 +19,7 @@ class ConfigBackend(object):
         """
         raise NotImplementedError
 
-    def mget(self, config_dict, application_slug, website_slug=None):
+    def mget(self, config_dict, application_short_name, website_short_name=None):
         """
         Get all the configuration values set for this application.
         
@@ -43,19 +43,19 @@ class ConfigBackend(object):
         """
         raise NotImplementedError
 
-    def set(self, config_name, value, config_dict, application_slug, website_slug=None):
+    def set(self, config_name, value, config_dict, application_short_name, website_short_name=None):
         """
         Add the value to the backend store given the key.
         """
         raise NotImplementedError
 
-    def mset(self, config_dict, application_slug, website_slug=None):
+    def mset(self, config_dict, application_short_name, website_short_name=None):
         """
         This saves all of the config values to the backend.
         """
         raise NotImplementedError
 
-    def is_website_application_active(application_slug, website_slug):
+    def is_website_application_active(application_short_name, website_short_name):
         """
         This returns whether or not the provided website application is active. 
         """

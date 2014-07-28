@@ -5,7 +5,7 @@ import site_config
 
 class BarConfig(site_config.SiteConfigBase):
 
-    application_slug = "bar"
+    application_short_name = "bar"
     application_verbose_name = "Bar App"
 
     def get_default_configs(self):

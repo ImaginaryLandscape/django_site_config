@@ -3,7 +3,7 @@ import site_config
 
 class FooConfig(site_config.SiteConfigBase):
 
-    application_slug = "foo"
+    application_short_name = "foo"
     application_verbose_name = "Foo App"
 
     def get_default_configs(self):

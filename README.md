@@ -11,7 +11,7 @@ Add to INSTALLED_APPS
 
 Create add the following class in a django app's __init__.py, models.py
 or some other location that is called when django first executes.
-Define "application_slug" and "application_verbose_name" attributes.
+Define "application_short_name" and "application_verbose_name" attributes.
 
 Implement the "get_default_configs()" method.  This must return a 
 configuration dictionary where the keys are the configuration 
@@ -25,7 +25,7 @@ Each nested dictionary must contain 3 keys:
  - choices (optional) = a list of tuples constraining the input.
    Only works with fields that are like ChoiceField that take
    choices as part of the constructor
-    i.e. (('a_slug','A text'),('b_slug', 'B text'))
+    i.e. (('a_short_name','A text'),('b_short_name', 'B text'))
 
 You also need to register the config class with the "register()" method.
 
@@ -35,7 +35,7 @@ See the example below
 	
 	class MyAppSiteConfig(site_config.SiteConfigBase):
 	
-	    application_slug = "myapp"
+	    application_short_name = "myapp"
 	    application_verbose_name = "My Application"
 	
 	    def get_default_configs(self):
