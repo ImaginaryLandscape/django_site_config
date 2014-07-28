@@ -77,7 +77,10 @@ class WebSiteApplication(models.Model):
     website = models.ForeignKey('site_config.WebSite')
     application = models.ForeignKey('site_config.Application')
     
-    active = models.BooleanField(default=False)
+    active = models.BooleanField(default=False, 
+        help_text="Activates or deactivates this website application combination. "
+        "In order for this to be active, both the corresponding "
+        "website and application must also be active.")
     description = models.TextField(blank=True, null=True)
 
     options = JSONField(blank=True, null=True)
