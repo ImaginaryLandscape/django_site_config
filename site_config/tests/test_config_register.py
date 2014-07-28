@@ -1,26 +1,42 @@
 from __future__ import unicode_literals
+import mock
+from copy import deepcopy
 from django.test import TestCase
 from django.test.utils import override_settings
-from . import utils as test_utils
 from site_config import utils
+from . import lib
+   
+
+settings = deepcopy(lib.settings_overrides)
+settings.update(dict(SITECONFIG_BACKEND="site_config.backends.settings_backend.SettingsBackend"))
+
+@override_settings(**settings)
+class TestSiteConfigRegistry(lib.SiteConfigMixin, TestCase):
+    def setUp(self):
+        self.load_config()
+
+    def test_register_site_config(self):
+        self.site_config.settings.config_registry.register(self.MyAppSiteConfig)
+        self.assertIsNotNone(self.site_config.settings.config_registry.get_config_class('myapp'), )
+
+    def test_register_site_config_verbose_name(self):
+        self.site_config.settings.config_registry.register(self.MyAppSiteConfig)
+        self.assertEqual(self.site_config.settings.config_registry.get_config_class('myapp')[0],
+                         self.MyAppSiteConfig.application_verbose_name)
+
+    def test_register_site_config_short_name(self):
+        self.site_config.settings.config_registry.register(self.MyAppSiteConfig)
+        config_class = self.site_config.settings.config_registry.get_config_class('myapp')[1]
+        self.assertEqual(config_class.application_short_name,
+                         self.MyAppSiteConfig.application_short_name)
+    
+    def test_get_settings_backend(self):
+        self.assertEqual(self.site_config.settings.BACKEND,
+                         lib.settings_overrides['SITECONFIG_BACKEND'])
 
 
-class SiteConfigMixin(object):
-
-    def load_config(self):
-        
-        config_dict = {'TEST_A':{'default':"Test A default", 
-                                 'field':'django.forms.CharField', 
-                                 'help':'Test A help text.'},
-                       "TEST_B":{'default':1,
-                                 'field':'django.forms.IntegerField', 
-                                 'help':'Test B help text.'},
-                       }
-        self.config_dict = config_dict
-        
-
-@override_settings(**test_utils.settings_overrides)
-class TestSiteConfigRegistry(SiteConfigMixin, TestCase):
+@override_settings(**lib.settings_overrides)
+class TestSiteConfigRegistry2(lib.SiteConfigMixin, TestCase):
     def setUp(self):
         self.load_config()
 
@@ -60,4 +76,3 @@ class TestSiteConfigRegistry(SiteConfigMixin, TestCase):
         self.assertEqual(updated["TEST_A"]["value"], "5432", )
         self.assertTrue(updated.has_key("TEST_B"))
         self.assertFalse(updated.has_key('TEST_C'))
-        

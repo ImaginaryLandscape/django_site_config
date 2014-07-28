@@ -1,29 +1,8 @@
 import mock
+from copy import deepcopy
 from django.test import TestCase
 from django.test.utils import override_settings
 from . import utils
-
-class SiteConfigMixin(object):
-
-    def load_config(self):
-        
-        config_dict = {'TEST_A':{'default':
-                                 "Test A default",
-                                 'field':'django.forms.CharField',
-                                 'help':'Test A help text.'},
-                       "TEST_B":{'default':1,
-                                 'field':'django.forms.IntegerField',
-                                 'help':'Test B help text.'}}
-        self.config_dict = config_dict
-        
-        self.site_config = __import__('site_config')
-        class MyAppSiteConfig(self.site_config.SiteConfigBase):
-            application_short_name = "myapp"
-            application_verbose_name = "My Application"
-        
-            def get_default_configs(self):
-                return config_dict
-        self.MyAppSiteConfig = MyAppSiteConfig
    
 
 class ModelsBaiscMixin(object):
@@ -62,8 +41,11 @@ class ModelsBaiscMixin(object):
         self.webapps.append(webapp)
 
 
-@override_settings(**utils.settings_overrides)
-class TestSiteConfigRegistry(SiteConfigMixin, TestCase):
+settings = deepcopy(utils.settings_overrides)
+settings.update(dict(SITECONFIG_BACKEND="site_config.backends.model_backend.DatabaseBackend"))
+
+@override_settings(**settings)
+class TestSiteConfigRegistry(utils.SiteConfigMixin, TestCase):
     def setUp(self):
         self.load_config()
 
@@ -87,8 +69,8 @@ class TestSiteConfigRegistry(SiteConfigMixin, TestCase):
                          utils.settings_overrides['SITECONFIG_BACKEND'])
 
 
-@override_settings(**utils.settings_overrides)
-class TestConfigBasicAccess(ModelsBaiscMixin, SiteConfigMixin, TestCase):
+@override_settings(**settings)
+class TestModelBackendBasicAccess(ModelsBaiscMixin, utils.SiteConfigMixin, TestCase):
     
     def setUp(self):
         self.load_config()
@@ -142,8 +124,8 @@ class TestConfigBasicAccess(ModelsBaiscMixin, SiteConfigMixin, TestCase):
         
 
 
-@override_settings(**utils.settings_overrides)
-class TestConfigActive(ModelsBaiscMixin, SiteConfigMixin, TestCase):
+@override_settings(**settings)
+class TestConfigActive(ModelsBaiscMixin, utils.SiteConfigMixin, TestCase):
     
     def _set_model_active_state(self, website, application, webapp):
         self.Website.objects.filter().update(active=website)
