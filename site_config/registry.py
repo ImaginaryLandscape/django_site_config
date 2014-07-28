@@ -1,13 +1,6 @@
 from __future__ import unicode_literals
-import os
+
 from .utils import import_module_attr
-
-settings = import_module_attr(
-    os.getenv('SITECONFIG_SETTINGS_MODULE', 'django.conf.settings')
-)
-
-BACKEND = getattr(settings, 'SITECONFIG_BACKEND',
-                  'site_config.backends.model_backend.DatabaseBackend')
 
 
 class ConfigRegistry():

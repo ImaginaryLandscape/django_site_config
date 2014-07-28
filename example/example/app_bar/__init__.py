@@ -21,4 +21,4 @@ class BarConfig(site_config.SiteConfigBase):
                               'choices':(('a',"A choice"),("b","B Choice"),)},
                 }
 
-site_config.settings.config_registry.register(BarConfig)
+site_config.registry.config_registry.register(BarConfig)

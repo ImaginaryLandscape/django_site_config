@@ -1,7 +1,7 @@
 from __future__ import unicode_literals
 import logging
 from django import forms
-from site_config import settings, utils
+from site_config import registry, utils
 from . import models
 
 logger = logging.getLogger(__name__)
@@ -18,7 +18,7 @@ def website_application_formfactory(instance=None):
     # only add config options for existing objects
     if instance:
         # lookup the configuration class for this object, based on the application short_name
-        config_lookup = settings.config_registry.get_config_class(instance.application.short_name)
+        config_lookup = registry.config_registry.get_config_class(instance.application.short_name)
         if config_lookup:
             config_class = config_lookup[1](website=instance.website.short_name)
             config_fields = []

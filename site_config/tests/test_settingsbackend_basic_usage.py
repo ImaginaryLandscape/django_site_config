@@ -17,13 +17,9 @@ settings.update(dict(
 class TestSettingsBackendBasicAccess(utils.SiteConfigMixin, TestCase):
     
     def setUp(self):
-        self.old_setting = site_settings.BACKEND
-        site_settings.BACKEND = "site_config.backends.settings_backend.SettingsBackend"
         self.load_config()
-        self.site_config.settings.config_registry.register(self.MyAppSiteConfig)
+        self.site_config.registry.config_registry.register(self.MyAppSiteConfig)
 
-    def tearDown(self):
-       site_settings.BACKEND = self.old_setting
 
     def test_attributeA_access(self):
         siteconfig = self.MyAppSiteConfig(website=None)

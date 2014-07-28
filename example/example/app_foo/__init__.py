@@ -14,4 +14,4 @@ class FooConfig(site_config.SiteConfigBase):
                            'field':'django.forms.IntegerField', 
                            'help':'Test B help text.'}}
 
-site_config.settings.config_registry.register(FooConfig)
+site_config.registry.config_registry.register(FooConfig)

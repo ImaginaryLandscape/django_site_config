@@ -2,8 +2,8 @@ from __future__ import unicode_literals
 import logging
 from django.core.exceptions import ImproperlyConfigured
 from django import forms
-from . import settings
-from . import utils
+from django.conf import settings
+from . import utils, registry
 
 logger = logging.getLogger(__name__)
 
@@ -11,6 +11,11 @@ class SiteConfigBase(object):
     
     application_short_name = "default_application"
     application_verbose_name = "Default Application"
+    
+    def get_backend(self):
+        backend = getattr(settings, 'SITECONFIG_BACKEND',
+            'site_config.backends.model_backend.DatabaseBackend')
+        return backend
     
     def get_default_configs(self):
         """
@@ -40,7 +45,7 @@ class SiteConfigBase(object):
                 raise ImproperlyConfigured(
                     "Config value dict %s must have a 'field' key, which is a valid django field." % (v))
         super(SiteConfigBase, self).__setattr__('_backend',
-            utils.import_module_attr(settings.BACKEND)())
+            utils.import_module_attr(self.get_backend())())
 
     def __getattr__(self, name):
         if name in self.get_default_configs().keys():
@@ -100,4 +105,4 @@ class SiteConfigBase(object):
         return self.get_default_configs().keys()
     
 
-#settings.config_registry.register(SiteConfigBase)
+#registry.config_registry.register(SiteConfigBase)

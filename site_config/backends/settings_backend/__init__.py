@@ -1,6 +1,7 @@
 from __future__ import unicode_literals
 import logging
-from site_config import utils, choices, settings
+from site_config import utils, choices, registry
+from django.conf import settings
 from .. import ConfigBackend
 
 logger = logging.getLogger(__name__)
@@ -22,7 +23,7 @@ class SettingsBackend(ConfigBackend):
         
         """
         config_meta = config_dict[key]
-        config_meta.update({'value':getattr(settings.settings, key, config_meta['default'])})
+        config_meta.update({'value':getattr(settings, key, config_meta['default'])})
         return config_meta
 
 

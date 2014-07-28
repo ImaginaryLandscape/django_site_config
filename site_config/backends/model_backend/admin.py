@@ -2,7 +2,7 @@ from __future__ import unicode_literals
 from django.contrib import admin
 from django import forms
 from django.core.urlresolvers import reverse
-from site_config import settings
+from site_config import registry
 from . import models
 from . import forms as backend_forms
 
@@ -32,7 +32,7 @@ class ApplicationAdminForm(forms.ModelForm):
     
     def __init__(self, *args, **kwargs):
         super(ApplicationAdminForm, self).__init__(*args, **kwargs)
-        self.fields['short_name'] = forms.ChoiceField(choices=settings.config_registry.get_config_list())
+        self.fields['short_name'] = forms.ChoiceField(choices=registry.config_registry.get_config_list())
     
     class Meta:
         model = models.Application
