@@ -50,9 +50,7 @@ class ModelsBaiscMixin(object):
         
         self.apps = []
         self.app1_slug = 'myapp'
-        app = self.Application(
-            name="My Application", slug=self.app1_slug, 
-            active=True)
+        app = self.Application(slug=self.app1_slug, active=True)
         app.save()
         self.apps.append(app)
 
