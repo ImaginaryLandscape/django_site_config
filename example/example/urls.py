@@ -15,10 +15,10 @@ urlpatterns = patterns('',
 
 
 urlpatterns += decorated_includes(lambda func: enable_disable_website(func, FooConfig), 
-    patterns('', url(r'^(?P<website>\w+)/foo/$', include('example.app_foo.urls')))
+    patterns('', url(r'^(?P<website>\w+)/foo/', include('example.app_foo.urls')))
 )
 
 urlpatterns += decorated_includes(lambda func: enable_disable_website(func, BarConfig), 
-    patterns('', url(r'^(?P<website>\w+)/bar/$', include('example.app_bar.urls')))
+    patterns('', url(r'^(?P<website>\w+)/bar/', include('example.app_bar.urls')))
 )
 

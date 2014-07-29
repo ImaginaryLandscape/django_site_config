@@ -133,9 +133,9 @@ use this website switching functionality, you need to pass in the
 
     # OR you can decorate an entire include
     
-    urlpatterns += decorated_includes(lambda func: enable_disable_website(func, BarConfig), 
-        patterns('', url(r'^(?P<website>\w+)/bar/$', include('example.app_bar.urls')))
-    )
+	urlpatterns += decorated_includes(lambda func: enable_disable_website(func, BarConfig), 
+	    patterns('', url(r'^(?P<website>\w+)/bar/', include('example.app_bar.urls')))
+	)
 
 
 # EXAMPLE:
