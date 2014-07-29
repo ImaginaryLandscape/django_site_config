@@ -87,7 +87,11 @@ class WebsiteApplication(models.Model):
         "website and application must also be active.  Curtained sites can "
         "only be viewed by superusers.")
     description = models.TextField(blank=True, null=True)
-
+    curtain_message = models.TextField(blank=True, null=True, 
+        default="This site is undergoing scheduled maintenance." 
+                "Thank you for your patience.",
+        help_text="Specify a message that should be displayed "
+                   "when the site is in the curtained state.")
     options = JSONField(blank=True, null=True)
     
     objects = WebsiteApplicationManager()
@@ -107,6 +111,9 @@ class WebsiteApplication(models.Model):
                            choices.WEBAPP_ACTIVE_STATE_CURTAINED]:
             return_value = self.active
         return return_value
+    
+    def get_curtain_message(self):
+        return self.curtain_message
 
     class Meta:
         app_label = 'site_config'
