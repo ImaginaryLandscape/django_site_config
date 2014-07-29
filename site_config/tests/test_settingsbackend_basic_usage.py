@@ -8,7 +8,7 @@ from . import utils
 
 settings = deepcopy(utils.settings_overrides)
 settings.update(dict(
-    SITECONFIG_BACKEND="site_config.backends.settings_backend.SettingsBackend"),
+    SITECONFIG_BACKEND_DEFAULT="site_config.backends.settings_backend.SettingsBackend"),
     TEST_B='Result in B',
 )
 

@@ -14,7 +14,7 @@ class SettingsBackend(ConfigBackend):
         return config_meta
 
     def website_application_status(self, application_short_name, website_short_name=None):
-        return getattr(settings, 'SITECONFIG_ACTIVE', choices.WEBAPP_ACTIVE_STATE_ENABLED)        
+        return getattr(settings, 'SITECONFIG_SITEAPP_STATUS', choices.WEBAPP_ACTIVE_STATE_ENABLED)        
 
     def get_curtain_message(self, application_short_name, website_short_name=None):
         return getattr(settings, 'SITECONFIG_CURTAIN_MESSAGE', 

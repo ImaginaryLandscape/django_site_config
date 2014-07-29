@@ -8,7 +8,7 @@ from . import choices
 logger = logging.getLogger(__name__)
 
 
-def determine_website(the_func, config_class):
+def enable_disable_website(the_func, config_class):
 
     def _decorated(*args, **kwargs):
         website = kwargs.get('website', None)

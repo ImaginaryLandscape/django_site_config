@@ -42,7 +42,7 @@ class ModelsBaiscMixin(object):
 
 
 settings = deepcopy(utils.settings_overrides)
-settings.update(dict(SITECONFIG_BACKEND="site_config.backends.model_backend.DatabaseBackend"))
+settings.update(dict(SITECONFIG_BACKEND_DEFAULT="site_config.backends.model_backend.DatabaseBackend"))
 
 
 @override_settings(**settings)

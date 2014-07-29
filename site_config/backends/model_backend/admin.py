@@ -37,6 +37,7 @@ class ApplicationAdminForm(forms.ModelForm):
     class Meta:
         model = models.Application
 
+
 class ApplicationAdmin(admin.ModelAdmin):
     form = ApplicationAdminForm
     #inlines = [WebsiteApplicationInline,]    

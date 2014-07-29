@@ -13,7 +13,7 @@ class SiteConfigBase(object):
     application_verbose_name = "Default Application"
     
     def get_backend(self):
-        backend = getattr(settings, 'SITECONFIG_BACKEND',
+        backend = getattr(settings, 'SITECONFIG_BACKEND_DEFAULT',
             'site_config.backends.model_backend.DatabaseBackend')
         return backend
     

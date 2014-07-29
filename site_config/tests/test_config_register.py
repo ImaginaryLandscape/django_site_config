@@ -8,7 +8,7 @@ from . import lib
    
 
 settings = deepcopy(lib.settings_overrides)
-settings.update(dict(SITECONFIG_BACKEND="site_config.backends.settings_backend.SettingsBackend"))
+settings.update(dict(SITECONFIG_BACKEND_DEFAULT="site_config.backends.settings_backend.SettingsBackend"))
 
 @override_settings(**settings)
 class TestSiteConfigRegistry(lib.SiteConfigMixin, TestCase):
