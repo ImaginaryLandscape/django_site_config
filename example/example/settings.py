@@ -28,6 +28,8 @@ TEMPLATE_DEBUG = True
 
 ALLOWED_HOSTS = []
 
+#SITECONFIG_BACKEND='site_config.backends.model_backend.DatabaseBackend' # default
+#SITECONFIG_BACKEND='site_config.backends.settings_backend.SettingsBackend'
 
 # Application definition
 
@@ -41,6 +43,7 @@ INSTALLED_APPS = (
 
     'site_config',
     'site_config.backends.model_backend',
+    'site_config.backends.settings_backend',
 
     'example.app_foo',
     'example.app_bar',

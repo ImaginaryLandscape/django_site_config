@@ -19,7 +19,8 @@ def determine_website(the_func, config_class):
                 pass
             else:
                 logger.debug("Website Application curtained %s - %s" % (website, app_config.application_short_name))
-                return HttpResponseNotFound(render_to_string("site_config/curtained.html", {}))
+                return HttpResponseNotFound(render_to_string("site_config/curtained.html", 
+                    {'message':'%s' % app_config.get_curtain_message()}))
         elif active_state == choices.WEBAPP_ACTIVE_STATE_ENABLED:
             pass
         else:

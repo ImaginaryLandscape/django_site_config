@@ -99,7 +99,7 @@ class SiteConfigBase(object):
         return self._backend.website_application_status(self.application_short_name, self.website)
     
     def get_curtain_message(self):
-        return ""
+        return self._backend.get_curtain_message(self.application_short_name, self.website)
     
     def __dir__(self):
         return self.get_default_configs().keys()

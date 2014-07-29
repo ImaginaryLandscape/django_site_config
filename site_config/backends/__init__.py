@@ -55,10 +55,17 @@ class ConfigBackend(object):
         """
         raise NotImplementedError
 
-    def website_application_status(application_short_name, website_short_name):
+    def website_application_status(application_short_name, website_short_name=None):
         """
         This returns whether or not the provided website application is active,
         is disabled, or is curtained. 
         It returns one of the strings defined in choices.WEBAPP_ACTIVE_STATES
+        """
+        raise NotImplementedError
+
+    def get_curtain_message(self, application_short_name, website_short_name=None):
+        """
+        Returns a string that is the message that an end user should see
+        when the site is curtained. 
         """
         raise NotImplementedError

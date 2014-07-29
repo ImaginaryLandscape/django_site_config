@@ -86,7 +86,7 @@ class WebsiteApplicationAdmin(admin.ModelAdmin):
             [None, {
                 'fields': (('website', 'website_active', 'website_link'), 
                            ('application', 'application_active', 'application_link',),
-                           'active', 'description', )
+                           'active', 'curtain_message', 'description', )
             }],
         ]
 
