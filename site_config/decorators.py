@@ -28,3 +28,59 @@ def enable_disable_website(the_func, config_class):
             raise Http404
         return the_func(*args, **kwargs)
     return _decorated
+
+
+
+def decorated_includes(wrapping_functions, patterns_rslt):
+    '''
+    SOURCE: http://stackoverflow.com/questions/2307926/is-it-possible-to-decorate-include-in-django-urls-with-login-required
+    
+    Used to require 1..n decorators in any view returned by a url tree
+
+    Usage:
+      urlpatterns = decorated_includes(func,patterns(...))
+      urlpatterns = decorated_includes((func,func,func),patterns(...))
+
+    Note:
+      Use functools.partial to pass keyword params to the required 
+      decorators. If you need to pass args you will have to write a 
+      wrapper function.
+
+    Example:
+      from functools import partial
+
+      urlpatterns = decorated_includes(
+          partial(login_required,login_url='/accounts/login/'),
+          patterns(...)
+      )
+    '''
+    if not hasattr(wrapping_functions,'__iter__'): 
+        wrapping_functions = (wrapping_functions,)
+
+    return [
+        _wrap_instance__resolve(wrapping_functions, instance)
+        for instance in patterns_rslt
+    ]
+
+def _wrap_instance__resolve(wrapping_functions, instance):
+    if not hasattr(instance,'resolve'): return instance
+    resolve = getattr(instance,'resolve')
+
+    def _wrap_func_in_returned_resolver_match(*args,**kwargs):
+        rslt = resolve(*args,**kwargs)
+        
+
+        if not hasattr(rslt,'func'):return rslt
+        f = getattr(rslt,'func')
+
+        for _f in reversed(wrapping_functions):
+            # @decorate the function from inner to outter
+            f = _f(f)
+
+        setattr(rslt,'func',f)
+
+        return rslt
+
+    setattr(instance,'resolve',_wrap_func_in_returned_resolver_match)
+
+    return instance

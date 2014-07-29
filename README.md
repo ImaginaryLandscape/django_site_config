@@ -122,7 +122,7 @@ use this website switching functionality, you need to pass in the
 /path/to/myproject/myapp/urls.py
 
 	from django.conf.urls import patterns, include, url
-	from site_config.decorators import enable_disable_website
+	from site_config.decorators import enable_disable_website, decorated_includes
 	from example.app_foo import FooConfig
 	from .views import IndexView
 	
@@ -131,7 +131,11 @@ use this website switching functionality, you need to pass in the
 	       {}, name="app_foo_index")
 	]
 
-
+    # OR you can decorate an entire include
+    
+    urlpatterns += decorated_includes(lambda func: enable_disable_website(func, BarConfig), 
+        patterns('', url(r'^(?P<website>\w+)/bar/$', include('example.app_bar.urls')))
+    )
 
 
 # EXAMPLE:
