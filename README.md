@@ -69,3 +69,18 @@ so this will need to be present in your application.
   pip install -e .[testing]
   cd example/
   ./manage.py test site_config
+
+
+
+# SETTINGS
+
+## Global settings
+SITECONFIG_BACKEND = 
+ Current options are as follows:
+ - site_config.backends.model_backend.DatabaseBackend  
+ - site_config.backends.settings_backend.SettingsBackend
+
+## settings_backend settings
+SITECONFIG_ACTIVE = 
+SITECONFIG_CURTAIN_MESSAGE = 
+
