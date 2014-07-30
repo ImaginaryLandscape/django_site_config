@@ -154,21 +154,21 @@ in your application.
 
     /path/to/myproject/myapp/views.py
 
-    # Class based view example
-	class IndexView(TemplateView):
-	    
-	    def get_context_data(self, **kwargs):
-	        website = kwargs.get('website', None)
-	        config = BarConfig(website=website)
-	        kwargs['config'] = config
-	        return kwargs
-	
-	# Function based view example
-	def index(request, template_name, website=None, *args, **kwargs):
-	    config = BarConfig(website=website)
-	    return render_to_response(template_name,
-	                              {'config':config,},
-	                              context_instance=RequestContext(request))
+	    # Class based view example
+		class IndexView(TemplateView):
+		    
+		    def get_context_data(self, **kwargs):
+		        website = kwargs.get('website', None)
+		        config = BarConfig(website=website)
+		        kwargs['config'] = config
+		        return kwargs
+		
+		# Function based view example
+		def index(request, template_name, website=None, *args, **kwargs):
+		    config = BarConfig(website=website)
+		    return render_to_response(template_name,
+		                              {'config':config,},
+		                              context_instance=RequestContext(request))
 	    
 
 
