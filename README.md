@@ -170,14 +170,20 @@ in your application.
 		                              {'config':config,},
 		                              context_instance=RequestContext(request))
 	    
+4.  You can access settings in the view or template by calling the settings
+    like you would an attribute on the config class.  
+    
+    Here is a usage example:
 
-
-## EXAMPLE ##
-
-    from osf.apps.core import FooSiteConfig
-    c = FooSiteConfig(website="stjoseph")
-    c.TEST_A
-    c.TEST_B
+	    from example.app_foo import FooConfig
+	    c = FooConfig(website="joesite")
+	    c.TEST_A
+	    c.TEST_B
+	    
+    Note:
+    in order for the settings to be looked up dynamically (on each request), the
+    config class must be instantiated inside the view with the proper
+    website passed to the constructor (or None) on every request to the view.
 
 
 ## TEMPLATE OVERRIDES ##
