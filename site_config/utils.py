@@ -1,6 +1,8 @@
 from __future__ import unicode_literals
+import os
 from copy import deepcopy
 from django.utils.importlib import import_module
+from django.template.loader import select_template
 
 
 def import_module_attr(path):
@@ -58,3 +60,36 @@ def config_dict_value_from_default(default_config_dict):
     for config_name, x in new_config_dict.items():
         new_config_dict[config_name].update({'value':new_config_dict[config_name]['default']})
     return new_config_dict
+
+
+def website_override_template(template_name, website):
+    """
+    Tries to look for a template on the template path named
+    [website]/[template_name], then falls back to looking
+    for a template at [template_name].  If neither exist, 
+    this raises a TempateDoesNotExist error.
+    """
+    website_template_name = os.path.join(website, template_name)
+    template_name = select_template((website_template_name, template_name,))
+    return template_name
+
+
+class WebsiteOverrideTemplateViewMixin(object):
+    """
+    Mix this class into a CBV where you want to  
+    provide a means for the website to override the 
+    template. The self.website attribute must be 
+    set in order for this mixin to override a template. 
+
+    Tries to look for a template on the template path named
+    [self.website]/[template_name], then falls back to looking
+    for a template at [template_name].  If neither exist, 
+    this raises a TempateDoesNotExist error.
+    """
+    def get_template_names(self):
+        templates = super(WebsiteOverrideTemplateViewMixin, self).get_template_names()
+        website = getattr(self, 'website', None)
+        if website:
+            templates = [os.path.join(website, self.template_name) ] + templates
+        return templates
+        

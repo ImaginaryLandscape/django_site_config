@@ -1,20 +1,32 @@
 from django.views.generic.base import TemplateView
 from django.shortcuts import render_to_response
 from django.template import RequestContext
+from site_config.utils import WebsiteOverrideTemplateViewMixin
+from site_config.decorators import webiste_template_override
 from example.app_bar import BarConfig
 
-class IndexView(TemplateView):
+class IndexView(WebsiteOverrideTemplateViewMixin, TemplateView):
+    
+    def dispatch(self, request, *args, **kwargs):
+        self.website = kwargs.get('website', None)
+        self.config = BarConfig(website=self.website)
+        return super(IndexView, self).dispatch(request, *args, **kwargs)
     
     def get_context_data(self, **kwargs):
-        website = kwargs.get('website', None)
-        config = BarConfig(website=website)
-        kwargs['config'] = config
+        kwargs['config'] = self.config
+        kwargs['website'] = self.website
         return kwargs
 
+
+@webiste_template_override
 def index(request, template_name, website=None, *args, **kwargs):
     config = BarConfig(website=website)
     return render_to_response(template_name,
-                              {'config':config,},
+                              {
+                               'website':website,
+                               'config':config,
+                               'template_name':template_name,
+                               },
                               context_instance=RequestContext(request))
     
     

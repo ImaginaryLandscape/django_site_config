@@ -118,7 +118,7 @@ in your application.
         
         site_config.settings.config_registry.register(MyAppSiteConfig)
 
-2.  Update and wrap your urls 
+2.  Enable and disable urls via enable_disable_website() decorator
     
     In order to make use django_site_config's ability to enable and disable
     particular views, you need to wrap your urls as follows.  In order to 
@@ -126,7 +126,7 @@ in your application.
     "website" kwarg as part of the url string.
     
     /path/to/myproject/myapp/urls.py
-    
+
         from django.conf.urls import patterns, include, url
         from site_config.decorators import enable_disable_website, decorated_includes
         from example.app_foo import FooConfig
@@ -148,28 +148,91 @@ in your application.
         urlpatterns += decorated_includes(lambda func: enable_disable_website(func, BarConfig),
             patterns('', url(r'^(?P<website>\w+)/bar/', include('example.app_bar.urls')))
         )
+   
+   Note: You can also use this enable_disable_website() function to decorate
+   a django CBV or FBV according to the django documentation.  
+   
+   Note: Your views must accept the 'website' keyword argument. 
+          
+3. Allow template overrides 
+
+    This module also provides a means to override templates for a specific site. 
     
-3.  Allow the optional 'website' kwarg into your views and use the 'website' 
-      variable as desired. 
+    FOR FUNCTION BASED VIEWS 
+    
+    Normally, if a FBV defines a template_name parameter in the url, say
+    "index.html", the view will lookup that template file via the normal
+    template loader chain.
+    
+    However, the webiste_template_override() decorator will first try 
+    to lookup a url at "[website]/index.html" and then fall back to using
+    the "index.html".  
 
+    /path/to/myproject/myapp/urls.py
+    
+        # Wrap a single url 
+        
+        urlpatterns = [
+            url('^(?P<website>\w+)/foo/$', 
+                webiste_template_override(IndexView.as_view(
+                template_name='index.html')), 
+                {}, 
+                name="app_foo_index"
+            )
+        ]
+        
+        # OR you can decorate an entire include
+        
+        urlpatterns += decorated_includes(webiste_template_override,
+            patterns('', url(r'^(?P<website>\w+)/bar/', 
+                             include('example.app_bar.urls')))
+        )
+        
+        # OR you can use both decorators at once on an entire include.
+        urlpatterns += decorated_includes(
+            (
+                lambda func: enable_disable_website(func, BarConfig),
+                webiste_template_override,
+            ),
+            patterns('', url(r'^(?P<website>\w+)/bar/', 
+                             include('example.app_bar.urls')))
+        )
+     
+    You then need to accept the website variable as a keyword argument
+    to your view function.  The website variable can be used in your view logic.
+    
     /path/to/myproject/myapp/views.py
+        
+        # Function based view example
+        def index(request, template_name, website=None, *args, **kwargs):
+            config = BarConfig(website=website)
+            return render_to_response(template_name,
+                {'config':config,},
+                context_instance=RequestContext(request))
 
-	    # Class based view example
-		class IndexView(TemplateView):
+    FOR CLASS BASED VIEWS
+    
+    You should use the WebsiteOverrideTemplateViewMixin to allow for the 
+    template override behavior.  
+    
+    /path/to/myproject/myapp/views.py
+        
+		from site_config.utils import WebsiteOverrideTemplateViewMixin
+		from site_config.decorators import webiste_template_override
+		from example.app_bar import BarConfig
+		
+		class IndexView(WebsiteOverrideTemplateViewMixin, TemplateView):
+		    
+		    def dispatch(self, request, *args, **kwargs):
+		        self.website = kwargs.get('website', None)
+		        self.config = BarConfig(website=self.website)
+		        return super(IndexView, self).dispatch(request, *args, **kwargs)
 		    
 		    def get_context_data(self, **kwargs):
-		        website = kwargs.get('website', None)
-		        config = BarConfig(website=website)
-		        kwargs['config'] = config
+		        kwargs['config'] = self.config
+		        kwargs['website'] = self.website
 		        return kwargs
-		
-		# Function based view example
-		def index(request, template_name, website=None, *args, **kwargs):
-		    config = BarConfig(website=website)
-		    return render_to_response(template_name,
-		                              {'config':config,},
-		                              context_instance=RequestContext(request))
-	    
+        
 4.  You can access settings in the view or template by calling the settings
     like you would an attribute on the config class.  
     
