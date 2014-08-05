@@ -110,10 +110,10 @@ in your application.
             
             def get_default_configs(self):
                 return {'TEST_A':{'default':"Test A default", 
-                                  'field':forms.CharField, 
+                                  'field':'django.forms.CharField', 
                                   'help':'Test A help text.'}, 
                         "TEST_B":{'default':1, 
-                                  'field':forms.IntegerField, 
+                                  'field':'django.forms.IntegerField', 
                                   'help':'Test B help text.'}}
         
         site_config.settings.config_registry.register(MyAppSiteConfig)
