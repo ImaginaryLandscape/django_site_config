@@ -4,7 +4,7 @@ from setuptools import setup
 
 setup(name='site_config',
       version='0.0.1',
-      description='istribution Utilities',
+      description='Configuration Utility to manage multiple "websites" in a project. ',
       author='Joe Jasinski',
       author_email='jjasinski@imagesape.com',
       install_requires=[
