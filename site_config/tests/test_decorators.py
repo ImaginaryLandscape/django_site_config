@@ -85,10 +85,10 @@ class TestDecorators(ModelsBaiscMixin, lib.SiteConfigMixin, TestCase):
         args = [mock_user, ]
         self.assertTrue('maintenance' in decorated_func(*args, **context).content)
 
-    def test_website_template_override__default(self):
-        decorated_func = decorators.webiste_template_override(self.helper_func)
-        context = {'website': self.site1_short_name}
-        self.assertTrue(decorated_func(**context))
+#    def test_website_template_override__default(self):
+#        decorated_func = decorators.webiste_template_override(self.helper_func)
+#        context = {'website': self.site1_short_name}
+#        self.assertTrue(decorated_func(**context))
 
 '''
     @mock.patch("site_config.decorators.utils.website_override_template")
