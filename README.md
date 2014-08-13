@@ -1,9 +1,39 @@
+## ABOUT ##
+
+This module provides you an API that lets you code django
+applications such that those apps can segment themselves 
+into multiple sections and have different settings for each
+section.  
+
+For example, say I want to use the same app under two different
+url paths and have different behavior (different settings) for both. 
+
+/mysite1/myapp/
+/mysite2/myapp/
+
+Also, say I want to enable or disable individual apps on those different 
+urls, via an admin interface. 
+
+Also, say I want to have a consistent way to define settings for those apps.
+
+
+This module helps you to accomplish those things. 
+
+## INSTALL ##
+
+Install from pip
+
+    pip install django_site_config
+
+Install from Github
+
+    git clone https://github.com/ImaginaryLandscape/django_site_config.git
 
 
 ## CONFIGURATION ##
 This application allows you to specify different siteconfig backends. 
 The siteconfig backend is responsible for getting and setting settings
-from/to a persistant location.  
+from/to a persistent location.  
 
 Currently, two backends are present in this module:
   model_backend
