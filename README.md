@@ -8,8 +8,8 @@ section.
 For example, say I want to use the same app under two different
 url paths and have different behavior (different settings) for both. 
 
-/mysite1/myapp/
-/mysite2/myapp/
+    /mysite1/myapp/
+    /mysite2/myapp/
 
 Also, say I want to enable or disable individual apps on those different 
 urls, via an admin interface. 
@@ -36,8 +36,9 @@ The siteconfig backend is responsible for getting and setting settings
 from/to a persistent location.  
 
 Currently, two backends are present in this module:
-  model_backend
-  settings_backend
+
+ -   model_backend
+ -   settings_backend
   
 The model_backend stores configuration settings in a set of 
 database models.  It allows for customizing the settings for a given
@@ -53,10 +54,10 @@ backend just looks it up from settings.py.
 Add to INSTALLED_APPS in settings.py
 
     'site_config',
-
-	# If using model_backend
-    'site_config.backends.model_backend',
     
+    # If using model_backend
+    'site_config.backends.model_backend',
+     
     # if using settings_backend
     'site_config.backends.settings_backend',
 
@@ -68,8 +69,9 @@ that is to be used.  If this setting is not defined, it defaults
 to the model_backend.
 
 Valid values for this are as follows:
-   "site_config.backends.model_backend.DatabaseBackend"  # model_backend
-   "site_config.backends.settings_backend.SettingsBackend"  # settings_backend
+
+    "site_config.backends.model_backend.DatabaseBackend"  # model_backend
+    "site_config.backends.settings_backend.SettingsBackend"  # settings_backend
 
 
 ### CONFIGURING THE settings_backend ###
