@@ -108,7 +108,7 @@ def enable_disable_website(the_func, config_class):
     return _decorated
 
 
-def webiste_template_override(the_func, template_kwarg_name="template_name"):
+def website_template_override(the_func, template_kwarg_name="template_name"):
 
     def _decorated(*args, **kwargs):
         website = kwargs.get('website', None)
