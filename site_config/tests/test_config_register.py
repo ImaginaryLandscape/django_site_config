@@ -1,14 +1,15 @@
 from __future__ import unicode_literals
-import mock
+# import mock
 from copy import deepcopy
 from django.test import TestCase
 from django.test.utils import override_settings
-from site_config import utils
+# from site_config import utils
 from . import lib
-   
+
 
 settings = deepcopy(lib.settings_overrides)
 settings.update(dict(SITECONFIG_BACKEND_DEFAULT="site_config.backends.settings_backend.SettingsBackend"))
+
 
 @override_settings(**settings)
 class TestSiteConfigRegistry(lib.SiteConfigMixin, TestCase):
@@ -30,3 +31,11 @@ class TestSiteConfigRegistry(lib.SiteConfigMixin, TestCase):
         self.assertEqual(config_class.application_short_name,
                          self.MyAppSiteConfig.application_short_name)
 
+    '''
+    def test_config_list(self):
+        self.site_config.registry.config_registry.register(self.MyAppSiteConfig)
+        self.assertEqual(
+            self.site_config.registry.config_registry.get_config_list(),
+            dir(self.MyAppSiteConfig.application_short_name)
+        )
+    '''

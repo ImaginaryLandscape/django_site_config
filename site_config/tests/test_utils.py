@@ -5,7 +5,6 @@ from django.test import TestCase
 from django.test.utils import override_settings
 from site_config import utils
 from . import lib
-   
 
 
 @override_settings(**lib.settings_overrides)
@@ -18,12 +17,12 @@ class TestUtils(lib.SiteConfigMixin, TestCase):
         self.assertNotIn("value", self.config_dict['TEST_B'])
         updated_config_dict = utils.config_dict_value_from_default(self.config_dict)
         self.assertIn("value", updated_config_dict['TEST_A'])
-        self.assertIn("value", updated_config_dict['TEST_B']) 
+        self.assertIn("value", updated_config_dict['TEST_B'])
         self.assertNotIn("value", self.config_dict['TEST_A'])
         self.assertNotIn("value", self.config_dict['TEST_B'])
 
     def test_config_dict_value_from_default__default_equals_value(self):
-        for k,v in utils.config_dict_value_from_default(self.config_dict).items():
+        for k, v in utils.config_dict_value_from_default(self.config_dict).items():
             self.assertEqual(v['default'], v['value'], )
 
     def test_update_config_dict__single_update(self):
@@ -49,3 +48,43 @@ class TestUtils(lib.SiteConfigMixin, TestCase):
         self.assertEqual(updated["TEST_A"]["value"], "5432", )
         self.assertTrue(updated.has_key("TEST_B"))
         self.assertFalse(updated.has_key('TEST_C'))
+
+    @mock.patch('site_config.utils.select_template')
+    def test_website_override_tamplate__exist(self, select_template):
+        select_template.return_value = 'Joe/app1'
+        self.assertEqual('Joe/app1',
+            utils.website_override_template('Joe', 'app1')
+                         )
+
+    @mock.patch('site_config.utils.select_template')
+    def test_website_override_tamplate__unexist(self, select_template):
+        select_template.return_value = 'app1'
+        self.assertEqual('app1',
+            utils.website_override_template('Joe', 'app1')
+                         )
+
+    class baseObj(object):
+        def __init__(self):
+            self.template_name = 'app2'
+            self.website = 'Joe'
+
+        def get_template_names(self):
+            return ['Joe/app1', ]
+
+    class testObj(utils.WebsiteOverrideTemplateViewMixin, baseObj):
+        pass
+
+    def test_website_override_template_view_mixin_exist(self):
+        test_obj = self.testObj()
+        self.assertEqual(
+            set(test_obj.get_template_names()),
+            set(['Joe/app1', 'Joe/app2'])
+        )
+
+    def test_website_override_template_view_mixin_unexist(self):
+        test_obj = self.testObj()
+        test_obj.website = None
+        self.assertEqual(
+            set(test_obj.get_template_names()),
+            set(['Joe/app1'])
+        )
