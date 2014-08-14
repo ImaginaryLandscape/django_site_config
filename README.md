@@ -23,7 +23,7 @@ This module helps you to accomplish those things.
 
 Install from pip
 
-    pip install django_site_config
+    pip install site_config
 
 Install from Github
 
