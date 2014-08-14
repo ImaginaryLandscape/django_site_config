@@ -1,6 +1,6 @@
 from django.conf.urls import patterns, include, url
 from django.contrib import admin
-from site_config.decorators import enable_disable_website, webiste_template_override, decorated_includes
+from site_config.decorators import enable_disable_website, website_template_override, decorated_includes
 from example.app_foo import FooConfig
 from example.app_bar import BarConfig
 from . import views

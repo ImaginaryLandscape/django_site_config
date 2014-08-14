@@ -196,7 +196,7 @@ in your application.
     "index.html", the view will lookup that template file via the normal
     template loader chain.
     
-    However, the webiste_template_override() decorator will first try 
+    However, the website_template_override() decorator will first try 
     to lookup a url at "[website]/index.html" and then fall back to using
     the "index.html".  
 
@@ -206,7 +206,7 @@ in your application.
         
         urlpatterns = [
             url('^(?P<website>\w+)/foo/$', 
-                webiste_template_override(IndexView.as_view(
+                website_template_override(IndexView.as_view(
                 template_name='index.html')), 
                 {}, 
                 name="app_foo_index"
@@ -215,7 +215,7 @@ in your application.
         
         # OR you can decorate an entire include
         
-        urlpatterns += decorated_includes(webiste_template_override,
+        urlpatterns += decorated_includes(website_template_override,
             patterns('', url(r'^(?P<website>\w+)/bar/', 
                              include('example.app_bar.urls')))
         )
@@ -224,7 +224,7 @@ in your application.
         urlpatterns += decorated_includes(
             (
                 lambda func: enable_disable_website(func, BarConfig),
-                webiste_template_override,
+                website_template_override,
             ),
             patterns('', url(r'^(?P<website>\w+)/bar/', 
                              include('example.app_bar.urls')))
@@ -250,7 +250,7 @@ in your application.
     /path/to/myproject/myapp/views.py
         
 		from site_config.utils import WebsiteOverrideTemplateViewMixin
-		from site_config.decorators import webiste_template_override
+		from site_config.decorators import website_template_override
 		from example.app_bar import BarConfig
 		
 		class IndexView(WebsiteOverrideTemplateViewMixin, TemplateView):

@@ -2,7 +2,7 @@ from django.views.generic.base import TemplateView
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 from site_config.utils import WebsiteOverrideTemplateViewMixin
-from site_config.decorators import webiste_template_override
+from site_config.decorators import website_template_override
 from example.app_bar import BarConfig
 
 class IndexView(WebsiteOverrideTemplateViewMixin, TemplateView):
@@ -18,7 +18,7 @@ class IndexView(WebsiteOverrideTemplateViewMixin, TemplateView):
         return kwargs
 
 
-@webiste_template_override
+@website_template_override
 def index(request, template_name, website=None, *args, **kwargs):
     config = BarConfig(website=website)
     return render_to_response(template_name,
