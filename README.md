@@ -1,5 +1,7 @@
 ## ABOUT ##
 
+[![Build Status](https://travis-ci.org/ImaginaryLandscape/django_site_config.svg?branch=master)](https://travis-ci.org/ImaginaryLandscape/django_site_config)
+
 This module provides you an API that lets you code django
 applications such that those apps can segment themselves 
 into multiple sections and have different settings for each
