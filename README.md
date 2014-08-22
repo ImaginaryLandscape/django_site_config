@@ -148,7 +148,7 @@ in your application.
                                   'field':'django.forms.IntegerField', 
                                   'help':'Test B help text.'}}
         
-        site_config.settings.config_registry.register(MyAppSiteConfig)
+        site_config.registy.config_registry.register(MyAppSiteConfig)
 
 2.  Enable and disable urls via enable_disable_website() decorator
     
@@ -167,7 +167,7 @@ in your application.
         # Wrap a single url 
         
         urlpatterns = [
-           url('^(?P<website>\w+)/foo/$', 
+           url('^(?P<website>[\w-]+)/foo/$', 
                enable_disable_website(IndexView.as_view(
                    template_name='index.html'), FooConfig), 
                {}, 
@@ -178,7 +178,7 @@ in your application.
         # OR you can decorate an entire include
         
         urlpatterns += decorated_includes(lambda func: enable_disable_website(func, BarConfig),
-            patterns('', url(r'^(?P<website>\w+)/bar/', include('example.app_bar.urls')))
+            patterns('', url(r'^(?P<website>[\w-]+)/bar/', include('example.app_bar.urls')))
         )
    
    Note: You can also use this enable_disable_website() function to decorate
@@ -205,7 +205,7 @@ in your application.
         # Wrap a single url 
         
         urlpatterns = [
-            url('^(?P<website>\w+)/foo/$', 
+            url('^(?P<website>[\w-]+)/foo/$', 
                 website_template_override(IndexView.as_view(
                 template_name='index.html')), 
                 {}, 
@@ -216,7 +216,7 @@ in your application.
         # OR you can decorate an entire include
         
         urlpatterns += decorated_includes(website_template_override,
-            patterns('', url(r'^(?P<website>\w+)/bar/', 
+            patterns('', url(r'^(?P<website>[\w-]+)/bar/', 
                              include('example.app_bar.urls')))
         )
         
@@ -226,7 +226,7 @@ in your application.
                 lambda func: enable_disable_website(func, BarConfig),
                 website_template_override,
             ),
-            patterns('', url(r'^(?P<website>\w+)/bar/', 
+            patterns('', url(r'^(?P<website>[\w-]+)/bar/', 
                              include('example.app_bar.urls')))
         )
      
