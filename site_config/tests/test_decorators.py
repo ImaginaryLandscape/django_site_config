@@ -85,16 +85,58 @@ class TestDecorators(ModelsBaiscMixin, lib.SiteConfigMixin, TestCase):
         args = [mock_user, ]
         self.assertTrue('maintenance' in decorated_func(*args, **context).content)
 
-#    def test_website_template_override__default(self):
-#        decorated_func = decorators.website_template_override(self.helper_func)
-#        context = {'website': self.site1_short_name}
-#        self.assertTrue(decorated_func(**context))
 
-'''
-    @mock.patch("site_config.decorators.utils.website_override_template")
-    def test_website_template_override__override(self, override_template):
-        override_template.return_value = ['app4.html']
-        decorated_func = decorators.website_template_override(self.helper_func)
-        context = {'website': self.site1_short_name, 'template_name': ['apps.html']}
-        self.assertTrue(decorated_func(**context))
-'''
+def func(request, website=None, template_name='app.html'):
+    return template_name
+
+
+def func_no_template_name(request, website=None):
+    return
+
+
+@override_settings(**lib.settings_overrides)
+class TestTemplateOverride(ModelsBaiscMixin, lib.SiteConfigMixin, TestCase):
+
+    @mock.patch('site_config.utils.select_template')
+    def test_template_name_from_url_context(self, select_template_mock):
+        """
+        template_name from URL context should have priority
+        """
+        decorated_func = decorators.website_template_override(func)
+        context = {'website': 'site1', 'template_name': 'app2.html'}
+        decorated_func(None, **context)
+        select_template_mock.assert_called_once_with(
+            ('site1/app2.html', 'app2.html')
+        )
+
+    @mock.patch('site_config.utils.select_template')
+    def test_template_name_from_function_defaults(self, select_template_mock):
+        """
+        template_name from func kwargs should be used if available
+        """
+        decorated_func = decorators.website_template_override(func)
+        context = {'website': 'site1'}
+        decorated_func(None, **context)
+        select_template_mock.assert_called_once_with(
+            ('site1/app.html', 'app.html')
+        )
+
+    @mock.patch('site_config.utils.select_template')
+    def test_no_website_kwarg_no_select_template_call(self, select_template_mock):
+        """
+        No select_template calls should be made if website not in context
+        """
+        decorated_func = decorators.website_template_override(func)
+        context = {}
+        decorated_func(None, **context)
+        select_template_mock.assert_not_called()
+
+    @mock.patch('site_config.utils.select_template')
+    def test_no_template_name_func_acceptance(self, select_template_mock):
+        """
+        No select_template calls should be made if website not in context
+        """
+        decorated_func = decorators.website_template_override(func)
+        context = {'website': 'site1'}
+        decorated_func(None, **context)
+        select_template_mock.assert_not_called()

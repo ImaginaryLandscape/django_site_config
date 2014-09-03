@@ -1,5 +1,7 @@
 from __future__ import unicode_literals
 import logging
+import inspect
+
 from django.http import Http404
 from django.http import HttpResponseNotFound
 from django.template.loader import render_to_string
@@ -112,7 +114,19 @@ def website_template_override(the_func, template_kwarg_name="template_name"):
 
     def _decorated(*args, **kwargs):
         website = kwargs.get('website', None)
+        # Check url pattern for template_name definition
         template_name = kwargs.get(template_kwarg_name, None)
+        # Check function kwarg for template_name definition
+        if website and not template_name:
+            _args, varargs, varkw, defaults = inspect.getargspec(the_func)
+            result = {}
+            if defaults:
+                firstdefault = len(_args) - len(defaults)
+            for i, arg in enumerate(_args):
+                if defaults and i >= firstdefault:
+                    result[arg] = defaults[i - firstdefault]
+            if template_kwarg_name in result:
+                template_name = result['template_name']
         if website and template_name:
             template = utils.website_override_template(template_name, website)
             kwargs.update({template_kwarg_name:template.name})
