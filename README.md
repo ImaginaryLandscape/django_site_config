@@ -64,6 +64,16 @@ Add to INSTALLED_APPS in settings.py
     'site_config.backends.settings_backend',
 
 
+Site specific base templates may also be used if the following context processor is add to `TEMPLATE_CONTEXT_PROCESSORS` in settings.py
+
+    'site_config.context_processors.decide_base_template'
+
+This sets a new context variable `base_template` so that the contents of your `base.html` template can extend a variable.  Instead of including all template logic in your projects `base.html` template, you can move this logic to another template (`base_site.html`, for instance) and have `base.html` be:
+
+    {% extends base_template %}
+
+Now in much the same way you can override templates (explained later in this document), you can create a `base_site.html` template inside your site's template folder that will be used if present. 
+
 ### GLOBAL SETTINGS in settings.py ###
 
 SITECONFIG_BACKEND_DEFAULT (optional) = This specifies the default backend
@@ -74,6 +84,9 @@ Valid values for this are as follows:
 
     "site_config.backends.model_backend.DatabaseBackend"  # model_backend
     "site_config.backends.settings_backend.SettingsBackend"  # settings_backend
+
+
+SITECONFIG_BASE_TEMPLATE (optional) = This specifies what the default base template should be when using the `decide_base_template` context processor.  If this context processor is not used, this setting has no effect.
 
 
 ### CONFIGURING THE settings_backend ###
