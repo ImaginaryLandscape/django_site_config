@@ -1,3 +1,4 @@
+from __future__ import unicode_literals
 from site_config.utils import website_override_template
 from django.conf import settings
 
