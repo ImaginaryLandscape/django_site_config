@@ -40,6 +40,16 @@ class TestDecideBaseTemplate(TestCase):
         )
 
     @mock.patch('site_config.context_processors.website_override_template')
+    def test_website_not_set_if_not_match(self, template_override_mock):
+        """
+        If this would raise a 404, verify override not called
+        """
+        request = mock.Mock()
+        request.resolver_match.kwargs.get.side_effect = Exception('something')
+        context_processors.decide_base_template(request)
+        template_override_mock.assert_not_called()
+
+    @mock.patch('site_config.context_processors.website_override_template')
     def test_template_lookup_result_returned(self, template_override_mock):
         """
         Verify result of website_override_template returned by function

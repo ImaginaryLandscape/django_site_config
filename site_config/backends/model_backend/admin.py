@@ -97,7 +97,15 @@ class WebsiteApplicationAdmin(admin.ModelAdmin):
         return form
 
     def save_model(self, request, obj, form, change):
-        obj.set_config_options(form.cleaned_data.get('options', {}), save=False)
+        if obj.id is None:
+            config_lookup = registry.config_registry.get_config_class(
+                obj.application.short_name
+            )
+            default_config = config_lookup[1]().get_default_configs()
+            obj.set_config_options(default_config, save=False)
+        else:
+            obj.set_config_options(
+                form.cleaned_data.get('options', {}), save=False)
         obj.save()
 
 

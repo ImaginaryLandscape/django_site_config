@@ -6,7 +6,10 @@ def decide_base_template(request):
     base_name = getattr(
         settings, 'SITECONFIG_BASE_TEMPLATE', 'base_site.html'
     )
-    website = request.resolver_match.kwargs.get('website', None)
+    try:
+        website = request.resolver_match.kwargs.get('website', None)
+    except:
+        website = None
     if website:
         base_name = website_override_template(base_name, website).name
     return {
