@@ -1,6 +1,7 @@
 from __future__ import unicode_literals
 import mock
 from copy import deepcopy
+from django.core.exceptions import ImproperlyConfigured
 from django.test import TestCase
 from django.test.utils import override_settings
 from site_config import utils
@@ -65,26 +66,53 @@ class TestUtils(lib.SiteConfigMixin, TestCase):
 
     class baseObj(object):
         def __init__(self):
-            self.template_name = 'app2'
-            self.website = 'Joe'
+            self.template_name = 'app.html'
+            self.website = 'Example'
+            self.kwargs = {}
 
         def get_template_names(self):
-            return ['Joe/app1', ]
+            # Direct implementation from TemplateResponseMixin
+            if self.template_name is None:
+                raise ImproperlyConfigured(
+                    "TemplateResponseMixin requires either a definition of "
+                    "'template_name' or an implementation of "
+                    "'get_template_names()'"
+                )
+            else:
+                return [self.template_name]
 
     class testObj(utils.WebsiteOverrideTemplateViewMixin, baseObj):
         pass
 
-    def test_website_override_template_view_mixin_exist(self):
+    def test_website_override_template_view_mixin_website_set(self):
         test_obj = self.testObj()
         self.assertEqual(
             set(test_obj.get_template_names()),
-            set(['Joe/app1', 'Joe/app2'])
+            set(['Example/app.html', 'app.html'])
         )
 
-    def test_website_override_template_view_mixin_unexist(self):
+    def test_website_override_template_view_mixin_website_set_kwargs_set(self):
+        test_obj = self.testObj()
+        test_obj.kwargs['website'] = 'Dan'
+        self.assertEqual(
+            set(test_obj.get_template_names()),
+            set(['Example/app.html', 'app.html'])
+        )
+
+    def test_website_override_template_view_mixin_no_website_no_kwargs(self):
         test_obj = self.testObj()
         test_obj.website = None
         self.assertEqual(
             set(test_obj.get_template_names()),
-            set(['Joe/app1'])
+            set(['app.html'])
         )
+
+    def test_website_override_template_view_mixin_no_website_set_kwargs(self):
+        test_obj = self.testObj()
+        test_obj.website = None
+        test_obj.kwargs['website'] = 'Different'
+        self.assertEqual(
+            set(test_obj.get_template_names()),
+            set(['Different/app.html','app.html'])
+        )
+

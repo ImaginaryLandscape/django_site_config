@@ -120,6 +120,8 @@ class WebsiteOverrideTemplateViewMixin(object):
             WebsiteOverrideTemplateViewMixin, self
         ).get_template_names()
         website = getattr(self, 'website', None)
+        if website is None:
+            website = self.kwargs.get('website', None)
         if website:
             templates = [os.path.join(website, self.template_name)] + templates
         return templates
