@@ -94,6 +94,11 @@ def func_no_template_name(request, website=None):
     return
 
 
+class PretentCBV(object):
+    def __call__(self, request, website):
+        pass
+
+
 @override_settings(**lib.settings_overrides)
 class TestTemplateOverride(ModelsBaiscMixin, lib.SiteConfigMixin, TestCase):
 
@@ -137,6 +142,17 @@ class TestTemplateOverride(ModelsBaiscMixin, lib.SiteConfigMixin, TestCase):
         No select_template calls should be made if website not in context
         """
         decorated_func = decorators.website_template_override(func)
+        context = {'website': 'site1'}
+        decorated_func(None, **context)
+        select_template_mock.assert_not_called()
+
+    @mock.patch('site_config.utils.select_template')
+    def test_no_template_name_feed(self, select_template_mock):
+        """
+        No select_template calls should be made if function is a callable
+        class instance, such as django Feed()
+        """
+        decorated_func = decorators.website_template_override(PretentCBV())
         context = {'website': 'site1'}
         decorated_func(None, **context)
         select_template_mock.assert_not_called()

@@ -117,7 +117,10 @@ def website_template_override(the_func, template_kwarg_name="template_name"):
         # Check url pattern for template_name definition
         template_name = kwargs.get(template_kwarg_name, None)
         # Check function kwarg for template_name definition
-        if website and not template_name:
+        # Also check to make sure that the_func is a function
+        #   i.e. django.contrib.syndication.views.Feed is a 
+        #   valid input to a url, but is not a function 
+        if website and not template_name and inspect.isfunction(the_func):
             _args, varargs, varkw, defaults = inspect.getargspec(the_func)
             result = {}
             if defaults:
