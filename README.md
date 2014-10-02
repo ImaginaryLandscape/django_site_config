@@ -70,7 +70,7 @@ Site specific base templates may also be used if the following context processor
 
 This sets a new context variable `base_template` so that the contents of your `base.html` template can extend a variable.  Instead of including all template logic in your projects `base.html` template, you can move this logic to another template (`base_site.html`, for instance) and have `base.html` be:
 
-    {% extends base_template %}
+    {% extends base_template|default:"base_site.html" %}
 
 Now in much the same way you can override templates (explained later in this document), you can create a `base_site.html` template inside your site's template folder that will be used if present. 
 
