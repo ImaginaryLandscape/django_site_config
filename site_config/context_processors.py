@@ -13,6 +13,11 @@ def decide_base_template(request):
         website = None
     if website:
         base_name = website_override_template(base_name, website).name
+    else:
+        parts = [part for part in request.path.split('/') if part != ""]
+        if len(parts) > 0:
+            website = parts[0]
+            base_name = website_override_template(base_name, website).name
     return {
         'base_template': base_name
     }
