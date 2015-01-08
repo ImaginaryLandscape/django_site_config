@@ -19,5 +19,6 @@ def decide_base_template(request):
             website = parts[0]
             base_name = website_override_template(base_name, website).name
     return {
-        'base_template': base_name
+        'base_template': base_name,
+        'website_shortname': website
     }
