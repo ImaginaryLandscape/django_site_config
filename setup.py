@@ -1,12 +1,13 @@
 #!/usr/bin/env python
 import os
-from setuptools import setup
+from setuptools import setup, find_packages
+
 
 def read(fname):
     return open(os.path.join(os.path.dirname(__file__), fname)).read()
 
 setup(name='site_config',
-      version='0.0.11',
+      version='0.0.12',
       description='Django configuration Utility to manage multiple "websites" in a project. ',
       long_description=read('README.md'),
       author='Joe Jasinski',
@@ -20,6 +21,8 @@ setup(name='site_config',
       extras_require = {
         'testing':  ["mock >= 1.0.1", ],
       },
+      packages=find_packages(),
+      include_package_data=True,
       classifiers=[
         "Framework :: Django", 
         "Topic :: Utilities",

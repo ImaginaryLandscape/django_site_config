@@ -1,1 +1,5 @@
-global-include *.py *.md *.html *.js *.css
+include README.md
+include setup.py
+recursive-include site_config * 
+recursive-exclude * __pycache__
+recursive-exclude * *.py[co]
