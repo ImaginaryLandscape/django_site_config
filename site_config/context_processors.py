@@ -17,15 +17,17 @@ def decide_base_template(request):
 
     if website:
         base_name = website_override_template(base_name, website).name
-        try:
-            website_obj = Website.objects.get(short_name=website)
-        except Website.DoesNotExist as e:
-            website_obj = None       
-    else:
+    else:        
         parts = [part for part in request.path.split('/') if part != ""]
         if len(parts) > 0:
             website = parts[0]
             base_name = website_override_template(base_name, website).name
+
+    if website:
+        try:
+            website_obj = Website.objects.get(short_name=website)
+        except Website.DoesNotExist as e:
+            website_obj = None
 
     return {
         'base_template': base_name,
