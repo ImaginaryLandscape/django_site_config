@@ -35,6 +35,7 @@ class ApplicationAdminForm(forms.ModelForm):
         self.fields['short_name'] = forms.ChoiceField(choices=registry.config_registry.get_config_list())
     
     class Meta:
+        exclude = []
         model = models.Application
 
 
