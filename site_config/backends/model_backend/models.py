@@ -1,6 +1,7 @@
 from __future__ import unicode_literals
 import logging
 from jsonfield import JSONField
+import django
 from django.utils.encoding import python_2_unicode_compatible
 from django.db import models
 from django.db.models.signals import post_save
@@ -51,34 +52,40 @@ class Application(models.Model):
 
 
 class WebsiteApplicationQuerySet(models.query.QuerySet):
-    
+
     def active(self):
         return self.filter(active=True)
 
     def website_applications(self, website_short_name, application_short_name):
         return self.filter(
-                        application__short_name=application_short_name, 
+                        application__short_name=application_short_name,
                         website__short_name=website_short_name, )
 
 
 class WebsiteApplicationManager(models.Manager):
-    
+
     def get_queryset(self):
         return WebsiteApplicationQuerySet(self.model, using=self._db)
-    
+
+    if django.VERSION < (1, 6):
+        get_query_set = get_queryset
+
     def __getattr__(self, attr, *args):
         try:
             return getattr(self.__class__, attr, *args)
         except AttributeError:
-            return getattr(self.get_query_set(), attr, *args)
-        
+            get_queryset = (self.get_query_set
+                if hasattr(self, 'get_query_set')
+                else self.get_queryset)
+            return getattr(get_queryset(), attr, *args)
+
 
 @python_2_unicode_compatible
 class WebsiteApplication(models.Model):
-    
+
     website = models.ForeignKey('site_config.Website')
     application = models.ForeignKey('site_config.Application')
-    
+
     active = models.CharField(max_length=20,
         default=choices.WEBAPP_ACTIVE_STATE_DISABLED,
         choices=choices.WEBAPP_ACTIVE_STATES,
@@ -93,9 +100,9 @@ class WebsiteApplication(models.Model):
         help_text="Specify a message that should be displayed "
                    "when the site is in the curtained state.")
     options = JSONField(blank=True, null=True)
-    
+
     objects = WebsiteApplicationManager()
-    
+
     def get_config_options(self, default_config_dict):
         return utils.update_config_dict(default_config_dict, self.options)
 
@@ -111,7 +118,7 @@ class WebsiteApplication(models.Model):
                            choices.WEBAPP_ACTIVE_STATE_CURTAINED]:
             return_value = self.active
         return return_value
-    
+
     def get_curtain_message(self):
         return self.curtain_message
 

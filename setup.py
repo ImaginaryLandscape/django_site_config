@@ -13,7 +13,7 @@ setup(name='site_config',
       author='Joe Jasinski',
       author_email='jjasinski@imagescape.com',
       install_requires=[
-       'django >= 1.6', 
+       'django >= 1.4', 
        'jsonfield >= 0.9.22',
       ],
       url='https://github.com/ImaginaryLandscape/django_site_config',
