@@ -4,12 +4,15 @@ python:
   - 2.7
 
 env:
+  - DJANGO=1.4
+  - DJANGO=1.5
   - DJANGO=1.6
   - DJANGO=1.7
   - DJANGO=1.8
 
 install:
   - pip install mock>=1.0.1
+  - pip install django-nose==1.4.1
   - pip install -q Django==$DJANGO
   - pip install -e . 
 
