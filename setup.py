@@ -7,7 +7,7 @@ def read(fname):
     return open(os.path.join(os.path.dirname(__file__), fname)).read()
 
 setup(name='site_config',
-      version='0.0.14',
+      version='0.0.15',
       description='Django configuration Utility to manage multiple "websites" in a project. ',
       long_description=read('README.md'),
       author='Joe Jasinski',
