@@ -12,6 +12,6 @@ env:
 
 install:
   - pip install -qU $DJANGO
-  - pip install -e .
+  - pip install -e .[testing]
 
 script: ./example/manage.py test site_config
