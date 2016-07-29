@@ -47,7 +47,6 @@ INSTALLED_APPS = (
 
     'example.app_foo',
     'example.app_bar',
-    'django_nose',
 
 )
 
@@ -97,4 +96,3 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
