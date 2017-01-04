@@ -9,7 +9,8 @@ https://docs.djangoproject.com/en/1.6/ref/settings/
 """
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
-import os, sys
+import os
+import sys
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
 sys.path.append(os.path.join(BASE_DIR, '..',))
@@ -63,7 +64,7 @@ ROOT_URLCONF = 'example.urls'
 
 WSGI_APPLICATION = 'example.wsgi.application'
 
-TEMPLATE_DIRS=(
+TEMPLATE_DIRS = (
   os.path.join(BASE_DIR, 'example', 'templates'),
 )
 
@@ -95,4 +96,3 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.6/howto/static-files/
 
 STATIC_URL = '/static/'
-
