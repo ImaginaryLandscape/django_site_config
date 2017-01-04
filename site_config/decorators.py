@@ -9,7 +9,7 @@ from . import choices, utils
 
 logger = logging.getLogger(__name__)
 
-###### Decorator Utilities
+# ##### Decorator Utilities
 
 
 def decorated_includes(wrapping_functions, patterns_rslt):
@@ -69,8 +69,7 @@ def _wrap_instance__resolve(wrapping_functions, instance):
     return instance
 
 
-
-###### Decorator Functions
+# ##### Decorator Functions
 
 def enable_disable_website(the_func, config_class):
     """
