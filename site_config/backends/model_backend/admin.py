@@ -98,7 +98,9 @@ class WebsiteApplicationAdmin(admin.ModelAdmin):
 
         form = backend_forms.website_application_formfactory(instance=obj)
         if form.config_fields:
-            self.fieldsets.append(["Configuration Options", {"fields": ['reset_options',] + form.config_fields}],)
+            self.fieldsets.append([
+                "Configuration Options", {
+                    "fields": ['reset_options', ] + form.config_fields}],)
         return form
 
     def save_model(self, request, obj, form, change):

@@ -4,7 +4,6 @@ from jsonfield import JSONField
 import django
 from django.utils.encoding import python_2_unicode_compatible
 from django.db import models
-from django.db.models.signals import post_save
 from site_config import utils, choices
 
 logger = logging.getLogger(__name__)
@@ -42,7 +41,8 @@ class Application(models.Model):
         max_length=64, unique=True,
         help_text="This must be a unique name using only "
                   "letter, numbers, hyphens, and underscores.")
-    active = models.BooleanField(default=False,
+    active = models.BooleanField(
+        default=False,
         help_text="Enable or disable the entire application.")
     description = models.TextField(blank=True, null=True)
 
@@ -79,7 +79,8 @@ class WebsiteApplicationManager(models.Manager):
         try:
             return getattr(self.__class__, attr, *args)
         except AttributeError:
-            get_queryset = (self.get_query_set
+            get_queryset = (
+                self.get_query_set
                 if hasattr(self, 'get_query_set')
                 else self.get_queryset)
             return getattr(get_queryset(), attr, *args)
