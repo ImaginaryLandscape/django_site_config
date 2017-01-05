@@ -2,7 +2,6 @@ from __future__ import unicode_literals
 import logging
 from site_config import utils, choices
 from .. import ConfigBackend
-from . import models
 
 logger = logging.getLogger(__name__)
 
@@ -13,6 +12,9 @@ class DatabaseBackend(ConfigBackend):
         return self.mget(config_dict, application_short_name, website_short_name).get(key)
 
     def mget(self, config_dict, application_short_name, website_short_name=None):
+        # Django 1.9+ registers apps;  this import is needed here to avoid
+        # the AppRegistryNotReady exception
+        from . import models
         # set a default 'value' in each nested config dict
         config_dict = utils.config_dict_value_from_default(config_dict)
         # lookup the site application
@@ -32,6 +34,9 @@ class DatabaseBackend(ConfigBackend):
         return self.mset(config_dict, application_short_name, website_short_name)
 
     def mset(self, config_dict, application_short_name, website_short_name=None):
+        # Django 1.9+ registers apps;  this import is needed here to avoid
+        # the AppRegistryNotReady exception
+        from . import models
         try:
             site_app = models.WebsiteApplication.objects.get(
                                 application__short_name=application_short_name,
@@ -42,6 +47,9 @@ class DatabaseBackend(ConfigBackend):
         return site_app
 
     def website_application_status(self, application_short_name, website_short_name):
+        # Django 1.9+ registers apps;  this import is needed here to avoid
+        # the AppRegistryNotReady exception
+        from . import models
         active = choices.WEBAPP_ACTIVE_STATE_DISABLED
         site_app_list = models.WebsiteApplication.objects.website_applications(
                         website_short_name=website_short_name,
@@ -53,6 +61,9 @@ class DatabaseBackend(ConfigBackend):
         return active
 
     def get_curtain_message(self, application_short_name, website_short_name=None):
+        # Django 1.9+ registers apps;  this import is needed here to avoid
+        # the AppRegistryNotReady exception
+        from . import models
         message = ("This site is undergoing scheduled maintenance."
                    "Thank you for your patience.")
         site_app_list = models.WebsiteApplication.objects.website_applications(
