@@ -102,8 +102,12 @@ def website_override_template(template_name, website):
     this raises a TempateDoesNotExist error.
     """
     website_template_name = os.path.join(website, template_name)
-    template_name = select_template((website_template_name, template_name,))
-    return template_name
+    template_obj = select_template((website_template_name, template_name,))
+    # Prior to Django 1.8, the above returns a template.
+    # With Django 1.8, we need to unwrap the template from the above.
+    if hasattr(template_obj, 'template'):
+        template_obj = template_obj.template
+    return template_obj
 
 
 class WebsiteOverrideTemplateViewMixin(object):

@@ -139,12 +139,12 @@ class TestTemplateOverride(ModelsBaiscMixin, lib.SiteConfigMixin, TestCase):
     @mock.patch('site_config.utils.select_template')
     def test_no_template_name_func_acceptance(self, select_template_mock):
         """
-        No select_template calls should be made if website not in context
+        Reverse of the above test
         """
         decorated_func = decorators.website_template_override(func)
         context = {'website': 'site1'}
         decorated_func(None, **context)
-        select_template_mock.assert_not_called()
+        select_template_mock.assert_called_once()
 
     @mock.patch('site_config.utils.select_template')
     def test_no_template_name_feed(self, select_template_mock):
