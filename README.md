@@ -43,15 +43,15 @@ Currently, two backends are present in this module:
  -   model_backend
  -   settings_backend
   
-The model_backend stores configuration settings in a set of 
-database models.  It allows for customizing the settings for a given
-app inside of the admin interface and allows for different 
-settings for different 'websites' inside an app.  Choosing this
-backend enables an Django admin module for setting these settings.
+The model_backend stores configuration settings in a set of database
+models.  It allows for customizing the settings for a given app inside
+of the admin interface and allows for different settings for different
+'websites' inside an app.  Choosing this backend enables an Django
+admin module for setting these settings.
 
-The settings_backend is a simple backend that uses settings.py.
-This is not dynamic; when an application needs a setting, this
-backend just looks it up from settings.py. 
+The settings_backend is a simple backend that uses settings.py.  This
+is not dynamic; when an application needs a setting, this backend just
+looks it up from settings.py.
 
 
 Add to INSTALLED_APPS in settings.py
@@ -64,22 +64,32 @@ Add to INSTALLED_APPS in settings.py
     # if using settings_backend
     'site_config.backends.settings_backend',
 
+If the model backend is used, the Website, Application, and
+WebsiteApplication models defined in models.py should appear in the
+Django admin. If the settings backend is used, they should not appear.
 
-Site specific base templates may also be used if the following context processor is add to `TEMPLATE_CONTEXT_PROCESSORS` in settings.py
+Site specific base templates may also be used if the following context
+processor is add to `TEMPLATE_CONTEXT_PROCESSORS` in settings.py
 
     'site_config.context_processors.decide_base_template'
 
-This sets a new context variable `base_template` so that the contents of your `base.html` template can extend a variable.  Instead of including all template logic in your projects `base.html` template, you can move this logic to another template (`base_site.html`, for instance) and have `base.html` be:
+This sets a new context variable `base_template` so that the contents
+of your `base.html` template can extend a variable.  Instead of
+including all template logic in your projects `base.html` template,
+you can move this logic to another template (`base_site.html`, for
+instance) and have `base.html` be:
 
     {% extends base_template|default:"base_site.html" %}
 
-Now in much the same way you can override templates (explained later in this document), you can create a `base_site.html` template inside your site's template folder that will be used if present. 
+Now in much the same way you can override templates (explained later
+in this document), you can create a `base_site.html` template inside
+your site's template folder that will be used if present.
 
 ### GLOBAL SETTINGS in settings.py ###
 
-SITECONFIG_BACKEND_DEFAULT (optional) = This specifies the default backend
-that is to be used.  If this setting is not defined, it defaults
-to the model_backend.
+SITECONFIG_BACKEND_DEFAULT (optional) = This specifies the default
+backend that is to be used.  If this setting is not defined, it
+defaults to the model_backend.
 
 Valid values for this are as follows:
 
@@ -87,20 +97,23 @@ Valid values for this are as follows:
     "site_config.backends.settings_backend.SettingsBackend"  # settings_backend
 
 
-SITECONFIG_BASE_TEMPLATE (optional) = This specifies what the default base template should be when using the `decide_base_template` context processor.  If this context processor is not used, this setting has no effect.
+SITECONFIG_BASE_TEMPLATE (optional) = This specifies what the default
+base template should be when using the `decide_base_template` context
+processor.  If this context processor is not used, this setting has no
+effect.
 
 
 ### CONFIGURING THE settings_backend ###
 
 Set the following in settings.py
 
-- SITECONFIG_SITEAPP_STATUS (optional) - This sets whether or not apps using this module should
-   be marked as active or not.  
-   Valid values are: "disabled", "curtained", or "enabled"
-   The default is "enabled"
+- SITECONFIG_SITEAPP_STATUS (optional) - This sets whether or not apps
+   using this module should be marked as active or not.  Valid values
+   are: "disabled", "curtained", or "enabled" The default is "enabled"
 
-- SITECONFIG_CURTAIN_MESSAGE (optional) = This sets the curtain message string when
-   SITECONFIG_SITEAPP_STATUS is set to "curtained". 
+- SITECONFIG_CURTAIN_MESSAGE (optional) = This sets the curtain
+   message string when SITECONFIG_SITEAPP_STATUS is set to
+   "curtained".
 
 
 ### CONFIGURING THE  model_backend ###
@@ -118,13 +131,14 @@ in your application.
 
 1.  Create a configuration class 
 	
-    Create add the following class in a django app's __init__.py, models.py
-    or some other location that is called when django first executes.
-    Define "application_short_name" and "application_verbose_name" attributes.
+    Create add the following class in a django app's __init__.py,
+    models.py or some other location that is called when django first
+    executes.  Define "application_short_name" and
+    "application_verbose_name" attributes.
     
-    Implement the "get_default_configs()" method.  This must return a 
-    configuration dictionary where the keys are the configuration 
-    variables for the application, and the values are nested metadata 
+    Implement the "get_default_configs()" method.  This must return a
+    configuration dictionary where the keys are the configuration
+    variables for the application, and the values are nested metadata
     dictionaries.
     
     Each nested dictionary must contain 3 keys:
@@ -136,7 +150,8 @@ in your application.
        choices as part of the constructor
         i.e. (('a_short_name','A text'),('b_short_name', 'B text'))
     
-    You also need to register the config class with the "register()" method.
+    You also need to register the config class with the "register()"
+    method.
     
     See the example below:
     
@@ -168,10 +183,10 @@ in your application.
 
 2.  Enable and disable urls via enable_disable_website() decorator
     
-    In order to make use django_site_config's ability to enable and disable
-    particular views, you need to wrap your urls as follows.  In order to 
-    use this website switching functionality, you need to pass in the 
-    "website" kwarg as part of the url string.
+    In order to make use django_site_config's ability to enable and
+    disable particular views, you need to wrap your urls as follows.
+    In order to use this website switching functionality, you need to
+    pass in the "website" kwarg as part of the url string.
     
     /path/to/myproject/myapp/urls.py
 
@@ -204,17 +219,18 @@ in your application.
           
 3. Allow template overrides 
 
-    This module also provides a means to override templates for a specific site. 
+    This module also provides a means to override templates for a
+    specific site.
     
     FOR FUNCTION BASED VIEWS 
     
-    Normally, if a FBV defines a template_name parameter in the url, say
-    "index.html", the view will lookup that template file via the normal
-    template loader chain.
+    Normally, if a FBV defines a template_name parameter in the url,
+    say "index.html", the view will lookup that template file via the
+    normal template loader chain.
     
-    However, the website_template_override() decorator will first try 
-    to lookup a url at "[website]/index.html" and then fall back to using
-    the "index.html".  
+    However, the website_template_override() decorator will first try
+    to lookup a url at "[website]/index.html" and then fall back to
+    using the "index.html".
 
     /path/to/myproject/myapp/urls.py
     
@@ -247,7 +263,8 @@ in your application.
         )
      
     You then need to accept the website variable as a keyword argument
-    to your view function.  The website variable can be used in your view logic.
+    to your view function.  The website variable can be used in your
+    view logic.
     
     /path/to/myproject/myapp/views.py
         
@@ -260,8 +277,8 @@ in your application.
 
     FOR CLASS BASED VIEWS
     
-    You should use the WebsiteOverrideTemplateViewMixin to allow for the 
-    template override behavior.  
+    You should use the WebsiteOverrideTemplateViewMixin to allow for
+    the template override behavior.
     
     /path/to/myproject/myapp/views.py
         
@@ -312,6 +329,3 @@ so this will need to be present in your application.
     pip install -e .[testing]
     cd example/
     ./manage.py test site_config
-
-
-

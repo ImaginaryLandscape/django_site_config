@@ -8,7 +8,7 @@ def read(fname):
 
 setup(
     name='site_config',
-    version='0.1.1',
+    version='0.1.2',
     description='Django configuration Utility to manage multiple "websites" in a project. ',
     long_description=read('README.md'),
     author='Joe Jasinski',

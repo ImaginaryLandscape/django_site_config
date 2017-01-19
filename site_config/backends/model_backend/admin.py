@@ -1,4 +1,5 @@
 from __future__ import unicode_literals
+from django.conf import settings
 from django.contrib import admin
 from django import forms
 from django.core.urlresolvers import reverse
@@ -116,6 +117,17 @@ class WebsiteApplicationAdmin(admin.ModelAdmin):
         obj.save()
 
 
-admin.site.register(models.Website, WebsiteAdmin)
-admin.site.register(models.Application, ApplicationAdmin)
-admin.site.register(models.WebsiteApplication, WebsiteApplicationAdmin)
+# If a site is using site config, the assumption is that it is using
+# the model backend (this backend). However, even if a site is using
+# the settings backend, it may still install the model backend and
+# then set SITECONFIG_BACKEND_DEFAULT in settings.py to indicate the
+# settings backend. In other words, this code could be executed even
+# if the settings backend is used. In that case, however, we do not
+# want the models to appear in the admin, so do not register them if
+# the site is using the settings backend.
+if getattr(settings, 'SITECONFIG_BACKEND_DEFAULT', False) == 'site_config.backends.settings_backend.SettingsBackend':
+    pass
+else:
+    admin.site.register(models.Website, WebsiteAdmin)
+    admin.site.register(models.Application, ApplicationAdmin)
+    admin.site.register(models.WebsiteApplication, WebsiteApplicationAdmin)
