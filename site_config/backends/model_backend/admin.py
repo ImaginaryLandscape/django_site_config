@@ -4,6 +4,7 @@ from django.contrib import admin
 from django import forms
 from django.core.urlresolvers import reverse
 from site_config import registry
+from site_config import utils
 from . import models
 from . import forms as backend_forms
 
@@ -110,7 +111,7 @@ class WebsiteApplicationAdmin(admin.ModelAdmin):
                 obj.application.short_name
             )
             default_config = config_lookup[1]().get_default_configs()
-            obj.set_config_options(default_config, save=False)
+            obj.set_config_options(utils.config_dict_value_from_default(default_config), save=False)
         else:
             obj.set_config_options(
                 form.cleaned_data.get('options', {}), save=False)

@@ -20,7 +20,9 @@ class TestWAAdmin(unittest.TestCase):
         obj.id = None
 
         config = mock.MagicMock()
-        config.return_value.get_default_configs.return_value = {'key': 'value'}
+        config.return_value.get_default_configs.return_value = {'TEST': {'default': 'value',
+                                                                         'field': 'django.forms.CharField',
+                                                                         'help': 'A test field'}}
         config_list = ("Test", config)
         registry_mock.config_registry.get_config_class.return_value = (
             config_list
@@ -32,7 +34,10 @@ class TestWAAdmin(unittest.TestCase):
             'test'
         )
         obj.set_config_options.assert_called_with(
-            {'key': 'value'},
+            {'TEST': {'default': 'value',
+                      'field': 'django.forms.CharField',
+                      'help': 'A test field',
+                      'value': 'value'}},
             save=False
         )
         obj.save.assert_called()
