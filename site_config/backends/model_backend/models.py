@@ -75,15 +75,15 @@ class WebsiteApplicationManager(models.Manager):
     if django.VERSION < (1, 6):
         get_query_set = get_queryset
 
-    def __getattr__(self, attr, *args):
-        try:
-            return getattr(self.__class__, attr, *args)
-        except AttributeError:
-            get_queryset = (
-                self.get_query_set
-                if hasattr(self, 'get_query_set')
-                else self.get_queryset)
-            return getattr(get_queryset(), attr, *args)
+#    def __getattr__(self, attr, *args):
+#        try:
+#            return getattr(self.__class__, attr, *args)
+#        except AttributeError:
+#            get_queryset = (
+#                self.get_query_set
+#                if hasattr(self, 'get_query_set')
+#                else self.get_queryset)
+#            return getattr(get_queryset(), attr, *args)
 
 
 @python_2_unicode_compatible

@@ -1,4 +1,4 @@
-from django.conf.urls import patterns, include, url
+from django.conf.urls import include, url
 from site_config.decorators import enable_disable_website
 from .views import IndexView
 
