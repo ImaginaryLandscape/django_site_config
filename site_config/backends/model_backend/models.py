@@ -56,34 +56,48 @@ class Application(models.Model):
         return "%s" % (self.short_name)
 
 
-class WebsiteApplicationQuerySet(models.query.QuerySet):
+# Why was this made like this? It looks like we're creating a custom
+# Manager object so apps can call "objects.website_applications()"
+# instead of the normal "objects.filter( ... )" etc. I guess that's
+# a nice convenience, but if it means overriding "__getattr__()", is
+# it worth it? That pattern leads to trouble, at least in Dj. 1.11.
 
-    def active(self):
-        return self.filter(active=True)
+# I don't understand why this was made this way, but I'm commenting
+# out these customizations. Methods in "__init__.py", will just have
+# to call `WebsiteApplication.objects.filter(website__short_name= ...)`
+# (etc) like you do with every other Manager object.
+#
+# If I've overlooked something and things don't work right anymore,
+# I'm sorry. Hopefully I can fix it better later. - NTT
+#
+#class WebsiteApplicationQuerySet(models.query.QuerySet):
+#
+#    def active(self):
+#        return self.filter(active=True)
+#
+#    def website_applications(self, website_short_name, application_short_name):
+#        return self.filter(
+#                        application__short_name=application_short_name,
+#                        website__short_name=website_short_name, )
 
-    def website_applications(self, website_short_name, application_short_name):
-        return self.filter(
-                        application__short_name=application_short_name,
-                        website__short_name=website_short_name, )
 
-
-class WebsiteApplicationManager(models.Manager):
-
-    def get_queryset(self):
-        return WebsiteApplicationQuerySet(self.model, using=self._db)
-
-    if django.VERSION < (1, 6):
-        get_query_set = get_queryset
-
-#    def __getattr__(self, attr, *args):
-#        try:
-#            return getattr(self.__class__, attr, *args)
-#        except AttributeError:
-#            get_queryset = (
-#                self.get_query_set
-#                if hasattr(self, 'get_query_set')
-#                else self.get_queryset)
-#            return getattr(get_queryset(), attr, *args)
+#class WebsiteApplicationManager(models.Manager):
+#
+#    def get_queryset(self):
+#        return WebsiteApplicationQuerySet(self.model, using=self._db)
+#
+#    if django.VERSION < (1, 6):
+#        get_query_set = get_queryset
+#
+##    def __getattr__(self, attr, *args):
+##        try:
+##            return getattr(self.__class__, attr, *args)
+##        except AttributeError:
+##            get_queryset = (
+##                self.get_query_set
+##                if hasattr(self, 'get_query_set')
+##                else self.get_queryset)
+##            return getattr(get_queryset(), attr, *args)
 
 
 @python_2_unicode_compatible
@@ -109,7 +123,8 @@ class WebsiteApplication(models.Model):
                   "when the site is in the curtained state.")
     options = JSONField(blank=True, null=True)
 
-    objects = WebsiteApplicationManager()
+# See comments above for why I deactivated this custom manager - NTT.
+#    objects = WebsiteApplicationManager()
 
     def get_config_options(self, default_config_dict):
         return utils.update_config_dict(default_config_dict, self.options)

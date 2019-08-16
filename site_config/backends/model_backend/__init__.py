@@ -18,9 +18,9 @@ class DatabaseBackend(ConfigBackend):
         # set a default 'value' in each nested config dict
         config_dict = utils.config_dict_value_from_default(config_dict)
         # lookup the site application
-        site_app_list = models.WebsiteApplication.objects.website_applications(
-                        website_short_name=website_short_name,
-                        application_short_name=application_short_name,
+        site_app_list = models.WebsiteApplication.objects.filter(
+                        website__short_name=website_short_name,
+                        application__short_name=application_short_name,
                         )
         if site_app_list.count() == 1:
             site_app = site_app_list[0]
@@ -51,9 +51,9 @@ class DatabaseBackend(ConfigBackend):
         # the AppRegistryNotReady exception
         from . import models
         active = choices.WEBAPP_ACTIVE_STATE_DISABLED
-        site_app_list = models.WebsiteApplication.objects.website_applications(
-                        website_short_name=website_short_name,
-                        application_short_name=application_short_name,
+        site_app_list = models.WebsiteApplication.objects.filter(
+                        website__short_name=website_short_name,
+                        application__short_name=application_short_name,
                         )
         if site_app_list.count() == 1:
             site_app = site_app_list[0]
@@ -66,9 +66,9 @@ class DatabaseBackend(ConfigBackend):
         from . import models
         message = ("This site is undergoing scheduled maintenance."
                    "Thank you for your patience.")
-        site_app_list = models.WebsiteApplication.objects.website_applications(
-                        website_short_name=website_short_name,
-                        application_short_name=application_short_name,
+        site_app_list = models.WebsiteApplication.objects.filter(
+                        website__short_name=website_short_name,
+                        application__short_name=application_short_name,
                         )
         if site_app_list.count() == 1:
             site_app = site_app_list[0]
