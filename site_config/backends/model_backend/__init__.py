@@ -1,4 +1,5 @@
 from __future__ import unicode_literals
+from __future__ import absolute_import
 import logging
 from site_config import utils, choices
 from .. import ConfigBackend

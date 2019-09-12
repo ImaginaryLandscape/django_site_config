@@ -53,3 +53,6 @@ docs/_build/
 target/
 
 *.sqlite3
+
+# Development Env
+*.bak

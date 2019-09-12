@@ -1,4 +1,5 @@
 from __future__ import unicode_literals
+from __future__ import absolute_import
 from site_config.utils import website_override_template
 from site_config.backends.model_backend.models import Website
 from django.conf import settings

@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 import mock
 # from copy import deepcopy
 # from django.conf.urls import patterns, url, include
@@ -12,7 +13,7 @@ from . import lib
 @override_settings(**lib.settings_overrides)
 class TestDecorators(ModelsBaiscMixin, lib.SiteConfigMixin, TestCase):
     def helper_func(*args, **kwargs):
-        if 'template_name' in kwargs.keys() and kwargs['template_name'] == []:
+        if 'template_name' in list(kwargs.keys()) and kwargs['template_name'] == []:
             return False
         return True
 
