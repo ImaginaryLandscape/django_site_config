@@ -8,13 +8,13 @@ def read(fname):
 
 setup(
     name='site_config',
-    version='0.1.3',
+    version='1.0.0',
     description='Django configuration Utility to manage multiple "websites" in a project. ',
     long_description=read('README.md'),
     author='Joe Jasinski',
     author_email='jjasinski@imagescape.com',
     install_requires=[
-        'django >= 1.4',
+        'django >= 1.11',
         'jsonfield >= 0.9.22',
     ],
     url='https://github.com/ImaginaryLandscape/django_site_config',
