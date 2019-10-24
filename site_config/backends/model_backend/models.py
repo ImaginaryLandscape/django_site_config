@@ -56,20 +56,6 @@ class Application(models.Model):
         return "%s" % (self.short_name)
 
 
-# Why was this made like this? It looks like we're creating a custom
-# Manager object so apps can call "objects.website_applications()"
-# instead of the normal "objects.filter( ... )" etc. I guess that's
-# a nice convenience, but if it means overriding "__getattr__()", is
-# it worth it? That pattern leads to trouble, at least in Dj. 1.11.
-
-# I don't understand why this was made this way, but I'm commenting
-# out these customizations. Methods in "__init__.py", will just have
-# to call `WebsiteApplication.objects.filter(website__short_name= ...)`
-# (etc) like you do with every other Manager object.
-#
-# If I've overlooked something and things don't work right anymore,
-# I'm sorry. Hopefully I can fix it better later. - NTT
-#
 #class WebsiteApplicationQuerySet(models.query.QuerySet):
 #
 #    def active(self):
@@ -80,6 +66,14 @@ class Application(models.Model):
 #                        application__short_name=application_short_name,
 #                        website__short_name=website_short_name, )
 
+# Why was this done? Are we creating a custom Manager object and overriding its
+# "__getattr__()" method just so apps can call "objects.website_applications()"
+# instead of the normal "objects.filter( ... )"? (see this pkg's "__init__.py").
+# for an example of where this was done). Overriding "__getattr__()" can lead to
+# trouble, at least in Dj. 1.11.
+#
+# If I've overlooked something and things don't work right anymore, I'm sorry.
+# Hopefully I can fix it better later. - NTT
 
 #class WebsiteApplicationManager(models.Manager):
 #
@@ -88,6 +82,18 @@ class Application(models.Model):
 #
 #    if django.VERSION < (1, 6):
 #        get_query_set = get_queryset
+#
+#
+# Specifically, stuff breaks when the `get()` method of `class DatabaseBackend`
+# (see this pkg's "__init__.py") calls its `mget()` method, which then has:
+#
+#     site_app_list = models.WebsiteApplication.objects.website_applications(...
+#
+# Django then throws "AttributeError: 'WebsiteApplicationManager' object has no
+# attribute 'website_applications'"
+#
+# The reason it thinks the attribute `website_applications` doesn't exist when
+# it is defined above is because `__getattr__()` is overridden below.
 #
 ##    def __getattr__(self, attr, *args):
 ##        try:

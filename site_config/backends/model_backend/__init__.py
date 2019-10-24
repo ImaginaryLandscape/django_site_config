@@ -21,7 +21,11 @@ class DatabaseBackend(ConfigBackend):
         site_app_list = models.WebsiteApplication.objects.filter(
                         website__short_name=website_short_name,
                         application__short_name=application_short_name,
-                        )
+        )
+        # See this package's "models.py" for notes on the removal of "website_applications"
+        # site_app_list = models.WebsiteApplication.objects.website_applications(
+        #                website_short_name=website_short_name,
+        #                application_short_name=application_short_name)
         if site_app_list.count() == 1:
             site_app = site_app_list[0]
             config_dict = site_app.get_config_options(config_dict)
