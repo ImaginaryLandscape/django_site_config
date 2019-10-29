@@ -34,5 +34,6 @@ def decide_base_template(request):
         'base_template': base_name,
         'website_shortname': website,
         'website_name': website_name,
+        'website_obj': website_obj,
         'website': website_obj
     }
