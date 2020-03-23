@@ -3,7 +3,7 @@ from __future__ import absolute_import
 from django.conf import settings
 from django.contrib import admin
 from django import forms
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from site_config import registry
 from site_config import utils
 from . import models
