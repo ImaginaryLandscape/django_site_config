@@ -9,7 +9,7 @@ def read(fname):
 
 setup(
     name='site_config',
-    version='1.0.1',
+    version='1.1.0',
     description='Django configuration Utility to manage multiple "websites" in a project. ',
     long_description=read('README.md'),
     author='Joe Jasinski',
@@ -28,8 +28,9 @@ setup(
     classifiers=[
         "Framework :: Django",
         "Topic :: Utilities",
-        "Programming Language :: Python :: 2.6",
         "Programming Language :: Python :: 2.7",
+        "Programming Language :: Python :: 3.7",
+        "Programming Language :: Python :: 3.8",
         "License :: OSI Approved :: BSD License",
     ],
 )
