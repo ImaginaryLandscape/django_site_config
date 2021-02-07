@@ -1,4 +1,5 @@
 from __future__ import unicode_literals
+from __future__ import absolute_import
 import logging
 from django.core.exceptions import ImproperlyConfigured
 from django import forms
@@ -49,7 +50,7 @@ class SiteConfigBase(object):
             utils.import_module_attr(self.get_backend())())
 
     def __getattr__(self, name):
-        if name in self.get_default_configs().keys():
+        if name in list(self.get_default_configs().keys()):
             return self.get_config(name)['value']
         else:
             raise AttributeError("%r object has no attribute %r" %
@@ -103,7 +104,7 @@ class SiteConfigBase(object):
         return self._backend.get_curtain_message(self.application_short_name, self.website)
 
     def __dir__(self):
-        return self.get_default_configs().keys()
+        return list(self.get_default_configs().keys())
 
 
 # registry.config_registry.register(SiteConfigBase)

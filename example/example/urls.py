@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from django.conf.urls import include, url
 from django.contrib import admin
 from site_config.decorators import enable_disable_website, website_template_override, decorated_includes

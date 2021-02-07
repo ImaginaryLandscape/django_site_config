@@ -1,4 +1,5 @@
 from __future__ import unicode_literals
+from __future__ import absolute_import
 import mock
 from copy import deepcopy
 from django.core.exceptions import ImproperlyConfigured
@@ -31,7 +32,7 @@ class TestUtils(lib.SiteConfigMixin, TestCase):
                                }
         updated = utils.update_config_dict(self.config_dict, updated_config_dict)
         self.assertEqual(updated["TEST_A"]["value"], "5432", )
-        self.assertFalse(updated["TEST_B"].has_key("value"))
+        self.assertFalse("value" in updated["TEST_B"])
 
     def test_update_config_dict__all_update(self):
         updated_config_dict = {'TEST_A': {"value": "5432"},
@@ -47,8 +48,8 @@ class TestUtils(lib.SiteConfigMixin, TestCase):
                                }
         updated = utils.update_config_dict(self.config_dict, updated_config_dict)
         self.assertEqual(updated["TEST_A"]["value"], "5432", )
-        self.assertTrue(updated.has_key("TEST_B"))
-        self.assertFalse(updated.has_key('TEST_C'))
+        self.assertTrue("TEST_B" in updated)
+        self.assertFalse('TEST_C' in updated)
 
     @mock.patch('site_config.utils.select_template')
     def test_website_override_tamplate__exist(self, select_template):

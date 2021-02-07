@@ -1,4 +1,5 @@
 # import mock
+from __future__ import absolute_import
 from copy import deepcopy
 from django.test import TestCase
 from django.test.utils import override_settings
@@ -35,13 +36,13 @@ class TestSettingsBackendBasicAccess(lib.SiteConfigMixin, TestCase):
 
     def test_get_config_has_proper_keys_A(self):
         siteconfig = self.MyAppSiteConfig(website=None)
-        self.assertEqual(self.config_dict["TEST_A"].keys() + ["value"],
-                        siteconfig.get_config("TEST_A").keys(), )
+        self.assertEqual(list(self.config_dict["TEST_A"].keys()) + ["value"],
+                        list(siteconfig.get_config("TEST_A").keys()), )
 
     def test_get_config_has_proper_keys_B(self):
         siteconfig = self.MyAppSiteConfig(website=None)
-        self.assertEqual(self.config_dict["TEST_B"].keys() + ['value'],
-                        siteconfig.get_config("TEST_B").keys(), )
+        self.assertEqual(list(self.config_dict["TEST_B"].keys()) + ['value'],
+                        list(siteconfig.get_config("TEST_B").keys()), )
 
     def test_get_config_default_value_B(self):
         siteconfig = self.MyAppSiteConfig(website=None)

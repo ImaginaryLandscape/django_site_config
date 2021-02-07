@@ -1,4 +1,5 @@
 from __future__ import unicode_literals
+from __future__ import absolute_import
 import logging
 from jsonfield import JSONField
 import django
@@ -109,8 +110,8 @@ class Application(models.Model):
 @python_2_unicode_compatible
 class WebsiteApplication(models.Model):
 
-    website = models.ForeignKey('site_config.Website')
-    application = models.ForeignKey('site_config.Application')
+    website = models.ForeignKey('site_config.Website', on_delete=models.CASCADE)
+    application = models.ForeignKey('site_config.Application', on_delete=models.CASCADE)
 
     active = models.CharField(
         max_length=20,
