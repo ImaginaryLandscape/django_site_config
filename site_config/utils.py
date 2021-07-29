@@ -1,10 +1,7 @@
 import os
 from copy import deepcopy
 from django.db.models.query import QuerySet
-try:
-    from importlib import import_module
-except ImportError:
-    from django.utils.importlib import import_module
+from importlib import import_module
 from django.template.loader import select_template
 
 
