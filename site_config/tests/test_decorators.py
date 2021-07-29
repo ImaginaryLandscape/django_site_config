@@ -1,4 +1,3 @@
-from __future__ import absolute_import
 import mock
 # from copy import deepcopy
 # from django.conf.urls import patterns, url, include

@@ -1,4 +1,3 @@
-from __future__ import absolute_import
 from django.views.generic.base import TemplateView
 from example.app_bar import BarConfig
 from site_config.backends.model_backend import models

@@ -1,4 +1,3 @@
-from __future__ import absolute_import
 from django.views.generic.base import TemplateView
 from site_config.utils import WebsiteOverrideTemplateViewMixin
 from example.app_foo import FooConfig

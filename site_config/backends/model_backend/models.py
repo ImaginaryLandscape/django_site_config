@@ -1,5 +1,3 @@
-from __future__ import unicode_literals
-from __future__ import absolute_import
 import logging
 from jsonfield import JSONField
 import django

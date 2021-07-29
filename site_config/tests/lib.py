@@ -1,4 +1,3 @@
-
 settings_overrides = dict(
     INSTALLED_APPS=(
         'django.contrib.admin',

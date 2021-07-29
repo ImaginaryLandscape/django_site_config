@@ -1,4 +1,3 @@
-from __future__ import absolute_import
 from django.views.generic.base import TemplateView
 from django.shortcuts import render_to_response
 from django.template import RequestContext

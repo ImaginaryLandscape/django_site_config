@@ -1,6 +1,3 @@
-from __future__ import unicode_literals
-
-
 class ConfigBackend(object):
 
     def get(self, key, config_dict, application_short_name, website_short_name=None):
