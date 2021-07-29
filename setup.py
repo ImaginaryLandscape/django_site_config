@@ -9,14 +9,15 @@ def read(fname):
 
 setup(
     name='site_config',
-    version='0.1.3',
+    version='1.0.0',
     description='Django configuration Utility to manage multiple "websites" in a project. ',
     long_description=read('README.md'),
-    author='Joe Jasinski',
-    author_email='jjasinski@imagescape.com',
+    author='Imaginary Landscape',
+    author_email='engineering@imagescape.com',
+    maintainer='Noel Taylor',
+    maintainer_email='ntaylor@imagescape.com',
     install_requires=[
-        'django >= 1.4',
-        'jsonfield >= 0.9.22',
+        'django >= 3.2',
     ],
     url='https://github.com/ImaginaryLandscape/django_site_config',
     keywords='django site config configuration',
@@ -28,8 +29,9 @@ setup(
     classifiers=[
         "Framework :: Django",
         "Topic :: Utilities",
-        "Programming Language :: Python :: 2.6",
-        "Programming Language :: Python :: 2.7",
+        "Programming Language :: Python :: 3.7",
+        "Programming Language :: Python :: 3.8",
+        "Programming Language :: Python :: 3.9",
         "License :: OSI Approved :: BSD License",
     ],
 )
