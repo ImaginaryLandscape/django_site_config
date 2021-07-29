@@ -1,5 +1,5 @@
 import logging
-from jsonfield import JSONField
+from django.db.models import JSONField
 import django
 from django.db import models
 from site_config import utils, choices
