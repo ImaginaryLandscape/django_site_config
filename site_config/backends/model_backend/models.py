@@ -3,14 +3,12 @@ from __future__ import absolute_import
 import logging
 from jsonfield import JSONField
 import django
-from django.utils.encoding import python_2_unicode_compatible
 from django.db import models
 from site_config import utils, choices
 
 logger = logging.getLogger(__name__)
 
 
-@python_2_unicode_compatible
 class Website(models.Model):
 
     name = models.CharField(
@@ -35,7 +33,6 @@ class Website(models.Model):
         return "%s (%s)" % (self.name, self.short_name)
 
 
-@python_2_unicode_compatible
 class Application(models.Model):
 
     short_name = models.SlugField(
@@ -101,7 +98,6 @@ class Application(models.Model):
 ##            return getattr(get_queryset(), attr, *args)
 
 
-@python_2_unicode_compatible
 class WebsiteApplication(models.Model):
 
     website = models.ForeignKey('site_config.Website', on_delete=models.CASCADE)
