@@ -9,7 +9,7 @@ def read(fname):
 
 setup(
     name='site_config',
-    version='1.0.0',
+    version='2.0.0',
     description='Django configuration Utility to manage multiple "websites" in a project. ',
     long_description=read('README.md'),
     author='Imaginary Landscape',
