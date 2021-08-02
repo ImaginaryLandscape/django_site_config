@@ -13,7 +13,7 @@ def website_application_formfactory(instance=None):
         "model": models.WebsiteApplication,
         'exclude': ['options', ],
     }
-    properties = {"Meta": type(b'Meta', (), meta_options)}
+    properties = {"Meta": type('Meta', (), meta_options)}
     # for deserialization, we need to know which fields are config fields
     config_fields = []
     # only add config options for existing objects
@@ -80,7 +80,7 @@ def website_application_formfactory(instance=None):
     properties.update(
         {"config_fields": sorted(config_fields), 'clean': clean_form})
     form = type(
-        b'WebsiteApplicationAdminForm', (forms.ModelForm, ), properties
+        'WebsiteApplicationAdminForm', (forms.ModelForm, ), properties
     )
     return form
 

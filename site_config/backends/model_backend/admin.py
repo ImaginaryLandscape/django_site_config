@@ -1,7 +1,8 @@
+from django import forms
 from django.conf import settings
 from django.contrib import admin
-from django import forms
 from django.urls import reverse
+from django.utils.safestring import mark_safe
 from site_config import registry
 from site_config import utils
 from . import models
@@ -66,8 +67,8 @@ class WebsiteApplicationAdmin(admin.ModelAdmin):
     def website_link(self, obj):
         return_value = None
         if obj:
-            return_value = "<a href='%s' onclick='return showAddAnotherPopup(this);'>Link</a>" % (
-                reverse('admin:site_config_website_change', args=(obj.website.id,)))
+            return_value = mark_safe("<a href='%s' onclick='return showAddAnotherPopup(this);'>Link</a>" % (
+                reverse('admin:site_config_website_change', args=(obj.website.id,))))
         return return_value
     website_link.short_description = 'Link'
     website_link.allow_tags = True
@@ -75,8 +76,8 @@ class WebsiteApplicationAdmin(admin.ModelAdmin):
     def application_link(self, obj):
         return_value = None
         if obj:
-            return_value = "<a href='%s' onclick='return showAddAnotherPopup(this);'>Link</a>" % (
-                reverse('admin:site_config_application_change', args=(obj.application.id,)))
+            return_value = mark_safe("<a href='%s' onclick='return showAddAnotherPopup(this);'>Link</a>" % (
+                reverse('admin:site_config_application_change', args=(obj.application.id,))))
         return return_value
     application_link.short_description = 'Link'
     application_link.allow_tags = True
