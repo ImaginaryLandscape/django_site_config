@@ -66,16 +66,17 @@ def website_application_formfactory(instance=None):
         if instance and config_class:
             if cleaned_data.get('reset_options'):
                 cleaned_data['options'] = utils.config_dict_value_from_default(
-                    config_class.get_configs())
+                    config_class.get_configs()
+                )
             else:
-                cleaned_configs = {}
-                for k, v in cleaned_data.items():
-                    if k in config_fields:
-                        cleaned_configs.update(
-                            {k: {'value': cleaned_data.pop(k)}}
-                        )
+                # The previous version of the line below would "pop()" the value from "cleaned_data"
+                # as it set that value into "cleaned_configs". This worked under Py2, but caused an
+                # error in Py3 as "cleaned_data" was being mutated during iteration.  I fixed it as
+                # below but was it important to pop those values from cleaned_data before returning?
+                cleaned_configs = {k: {'value': v} for k, v in cleaned_data.items() if k in config_fields}
                 cleaned_data['options'] = utils.update_config_dict(
-                    config_class.get_configs(), cleaned_configs)
+                    config_class.get_configs(), cleaned_configs
+                )
         return cleaned_data
     properties.update(
         {"config_fields": sorted(config_fields), 'clean': clean_form})
