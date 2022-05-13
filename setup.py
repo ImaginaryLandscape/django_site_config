@@ -12,6 +12,7 @@ setup(
     version='2.0.0',
     description='Django configuration Utility to manage multiple "websites" in a project. ',
     long_description=read('README.md'),
+    long_description_content_type='text/markdown',
     author='Imaginary Landscape',
     author_email='engineering@imagescape.com',
     maintainer='Noel Taylor',
