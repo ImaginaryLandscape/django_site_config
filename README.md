@@ -25,7 +25,7 @@ This module helps you to accomplish those things.
 
 Install from pip
 
-    pip install site_config
+    pip install site-config
 
 Install from Github
 

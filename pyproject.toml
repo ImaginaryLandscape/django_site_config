@@ -1,0 +1,20 @@
+[tool.poetry]
+name = "site-config"
+version = "2.0.1"
+description = 'Django configuration Utility to manage multiple "websites" in a project.'
+homepage = "https://github.com/ImaginaryLandscape/django_site_config"
+readme = "README.md"
+authors = ["Imagescape <info@imagescape.com>"]
+license = "BSD"
+
+[tool.poetry.dependencies]
+python = "^3.7"
+django = "^3.2"
+
+[tool.poetry.dev-dependencies]
+mock = "^1.0.1"
+six = "^1.9.0"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
