@@ -112,9 +112,6 @@ class WebsiteApplicationAdmin(admin.ModelAdmin):
             )
             default_config = config_lookup[1]().get_default_configs()
             obj.set_config_options(utils.config_dict_value_from_default(default_config), save=False)
-        else:
-            obj.set_config_options(
-                form.cleaned_data.get('options', {}), save=False)
         obj.save()
 
 
