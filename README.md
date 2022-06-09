@@ -321,3 +321,50 @@ extends "base.html" so this will need to be present in your application.
     ./manage.py test site_config
 
 Note: The tests in this version are out of date and need to be updated.
+
+
+## ISSUES ##
+
+1.
+
+If you are using the model backend, the Django admin allows you to change the
+"active" status of all listed instances directly from the ChangeList, without
+having to "drill down" to the ChangeView.  This is true for the "Application",
+"Website", and "ApplicationWebsite" models.  Once changes have been made, you
+can also save them directly from the ChangeList.
+
+But there are some issues with this. Let's say you are on the ChangeList for
+the "WebsiteApplication" model, and you click on a row where the "application"
+is, for example, formbundle. You are then redirected to the ChangeView for
+that instance.
+
+But then if you hit the back button to return to the ChangeList, and you click
+on another row that uses a different application, for example, eventcalendar,
+then sometimes you will see a "KeyError" like this:
+
+"Key 'FORMBUNDLE_ADMIN_GROUPS' not found in 'WebsiteApplicationAdminForm'..."
+
+So what's happening is that clicking on the formbundle row first somehow makes
+Django expect that something called "FORMBUNDLE_ADMIN_GROUPS" will be findable
+in "WebsiteApplicationAdminForm", but because the new row's "application" is
+"eventcalendar", it's not there.
+
+As noted above, this only happens some of the time. Sometiems it works fine.
+
+There is a similar error that can happen if you back out of a ChangeView and
+then click "add new" from the ChangeList.
+
+2.
+
+Sometimes a ChangeView will show the "admin groups" and sometimes it won't.
+The widget usually fails to appear when navigating to the ChangeView of an
+existing instance after adding a new instance or deleting an instance.
+
+There's also a third arrangement of the widgets on the ChangeView that can
+sometimes appear. Normally, the "website active / app active" indicators and
+links to the related website / app are at the top of the page, and the "reset
+to defaults" checkbox and the "admin groups" widget are in the middle of the
+page in a section labeled "configuration options". But in this third version,
+the admin groups, the checkbox, and the "active" indicators & links all show
+up at the bottom of the page, and there is no "configuration options" label at
+all.  This version occurs only rarely and is very difficult to reproduce.
