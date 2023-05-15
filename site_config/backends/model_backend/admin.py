@@ -89,21 +89,25 @@ class WebsiteApplicationAdmin(admin.ModelAdmin):
     list_filter = ['active', 'website', 'application']
     readonly_fields = ['website_active', 'application_active', 'website_link', 'application_link']
 
-    def get_form(self, request, obj=None, **kwargs):
-        self.fieldsets = [
+    def get_fieldsets(self, request, obj=None):
+        fieldsets = [
             [None, {
                 'fields': (('website', 'website_active', 'website_link'),
                            ('application', 'application_active', 'application_link',),
                            'active', 'curtain_message', 'description', )
             }],
         ]
-
         form = backend_forms.website_application_formfactory(instance=obj)
         if form.config_fields:
-            self.fieldsets.append([
+            fieldsets.append([
                 "Configuration Options", {
-                    "fields": ['reset_options', ] + form.config_fields}],)
-        return form
+                    "fields": tuple(['reset_options'] + form.config_fields)
+                }
+            ])
+        return fieldsets
+
+    def get_form(self, request, obj=None, change=False, **kwargs):
+        return backend_forms.website_application_formfactory(instance=obj)
 
     def save_model(self, request, obj, form, change):
         if obj.id is None:
