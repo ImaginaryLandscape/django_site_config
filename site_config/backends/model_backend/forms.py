@@ -38,28 +38,23 @@ def website_application_formfactory(instance=None):
                     initial=lookup_dict['value'],
                     required=False
                 )
-                if hasattr(field_class, 'choices') and \
-                        'choices' in lookup_dict:
-                    kwargs.update(
-                        {'choices': lookup_dict.get('choices', None)}
-                    )
-                if hasattr(field_class, "queryset") and \
-                        'queryset' in lookup_dict:
+                if hasattr(field_class, 'choices') and 'choices' in lookup_dict:
+                    kwargs.update({'choices': lookup_dict.get('choices', None)})
+
+                if hasattr(field_class, "queryset") and 'queryset' in lookup_dict:
                     func = import_helper(lookup_dict.get('queryset'))
-                    kwargs.update(
-                        {'queryset': func()}
-                    )
+                    kwargs.update({'queryset': func()})
+
                 properties.update({
                     config_name: field_class(**kwargs),
                 })
-            properties.update(
-                {
-                    'reset_options': forms.BooleanField(
-                        label="Reset to Defaults",
-                        required=False, initial=False
-                    ),
-                }
-            )
+
+            properties.update({
+                'reset_options': forms.BooleanField(
+                    label="Reset to Defaults",
+                    required=False, initial=False
+                ),
+            })
 
     def clean_form(self):
         cleaned_data = super(self.__class__, self).clean()
@@ -69,20 +64,16 @@ def website_application_formfactory(instance=None):
                     config_class.get_configs()
                 )
             else:
-                # The previous version of the line below would "pop()" the value from "cleaned_data"
-                # as it set that value into "cleaned_configs". This worked under Py2, but caused an
-                # error in Py3 as "cleaned_data" was being mutated during iteration.  I fixed it as
-                # below but was it important to pop those values from cleaned_data before returning?
                 cleaned_configs = {k: {'value': v} for k, v in cleaned_data.items() if k in config_fields}
+                for config_field in config_fields:
+                    cleaned_data.pop(config_field, None)
                 cleaned_data['options'] = utils.update_config_dict(
                     config_class.get_configs(), cleaned_configs
                 )
         return cleaned_data
-    properties.update(
-        {"config_fields": sorted(config_fields), 'clean': clean_form})
-    form = type(
-        'WebsiteApplicationAdminForm', (forms.ModelForm, ), properties
-    )
+
+    properties.update({"config_fields": sorted(config_fields), 'clean': clean_form})
+    form = type('WebsiteApplicationAdminForm', (forms.ModelForm, ), properties)
     return form
 
 
