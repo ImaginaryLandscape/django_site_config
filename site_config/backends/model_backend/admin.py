@@ -110,12 +110,16 @@ class WebsiteApplicationAdmin(admin.ModelAdmin):
         return backend_forms.website_application_formfactory(instance=obj)
 
     def save_model(self, request, obj, form, change):
+        config_lookup = registry.config_registry.get_config_class(obj.application.short_name)
+        default_config = config_lookup[1]().get_default_configs()
         if obj.id is None:
-            config_lookup = registry.config_registry.get_config_class(
-                obj.application.short_name
-            )
-            default_config = config_lookup[1]().get_default_configs()
-            obj.set_config_options(utils.config_dict_value_from_default(default_config), save=False)
+            # This branch adds default values to each config option
+            config_dict = utils.config_dict_value_from_default(default_config)
+        else:
+            # This branch updates the current values with the form values
+            config_dict = obj.get_config_options(default_config)
+            config_dict.update(form.cleaned_data.get('options', {}))
+        obj.set_config_options(config_dict, save=False)
         obj.save()
 
 
