@@ -90,20 +90,16 @@ def config_dict_value_from_default(default_config_dict):
     return new_config_dict
 
 
-def website_override_template(template_name, website):
+def website_override_template(template_name, website_shortname):
     """
     Tries to look for a template on the template path named
-    [website]/[template_name], then falls back to looking
-    for a template at [template_name].  If neither exist,
-    this raises a TempateDoesNotExist error.
+    [website_shortname]/[template_name], then falls back to
+    looking for a template at [template_name].  If neither
+    exists, this raises a TempateDoesNotExist error.
     """
-    website_template_name = os.path.join(website, template_name)
-    template_obj = select_template((website_template_name, template_name,))
-    # Prior to Django 1.8, the above returns a template.
-    # With Django 1.8, we need to unwrap the template from the above.
-    if hasattr(template_obj, 'template'):
-        template_obj = template_obj.template
-    return template_obj
+    website_template_name = os.path.join(website_shortname, template_name)
+    template_obj = select_template((website_template_name, template_name))
+    return template_obj.template
 
 
 class WebsiteOverrideTemplateViewMixin(object):

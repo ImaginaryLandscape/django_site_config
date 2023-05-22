@@ -10,28 +10,28 @@ def decide_base_template(request):
     website_obj = None
     website_name = None
     try:
-        website = request.resolver_match.kwargs.get('website', None)
+        website_shortname = request.resolver_match.kwargs.get('website', None)
     except:
-        website = None
+        website_shortname = None
 
-    if website:
-        base_name = website_override_template(base_name, website).name
+    if website_shortname:
+        base_name = website_override_template(base_name, website_shortname).name
     else:
         parts = [part for part in request.path.split('/') if part != ""]
         if len(parts) > 0:
-            website = parts[0]
-            base_name = website_override_template(base_name, website).name
+            website_shortname = parts[0]
+            base_name = website_override_template(base_name, website_shortname).name
 
-    if website:
+    if website_shortname:
         try:
-            website_obj = Website.objects.get(short_name=website)
+            website_obj = Website.objects.get(short_name=website_shortname)
             website_name = website_obj.name
         except Website.DoesNotExist as e:
             website_obj = None
 
     return {
         'base_template': base_name,
-        'website_shortname': website,
+        'website_shortname': website_shortname,
         'website_name': website_name,
-        'website': website_obj
+        'website_obj': website_obj
     }
