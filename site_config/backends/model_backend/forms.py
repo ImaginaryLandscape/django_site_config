@@ -39,7 +39,7 @@ def website_application_formfactory(instance=None):
                     required=False
                 )
                 if hasattr(field_class, 'choices') and 'choices' in lookup_dict:
-                    kwargs.update({'choices': lookup_dict.get('choices', None)})
+                    kwargs.update({'choices': lookup_dict.get('choices')})
 
                 if hasattr(field_class, "queryset") and 'queryset' in lookup_dict:
                     func = import_helper(lookup_dict.get('queryset'))
