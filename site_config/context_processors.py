@@ -81,5 +81,5 @@ def add_site_specific_options(request):
             for option in wa.options:
                 options_dict[option] = wa.options[option].get("value") or wa.options[option].get("default")
             #options_dict = {option: wa.options[option].get("value") or wa.options[option].get("default") for option in wa.options}
-            return {app_obj.short_name + "_options": options_dict}
+            return {"siteconfig_options": options_dict}
     return {}
