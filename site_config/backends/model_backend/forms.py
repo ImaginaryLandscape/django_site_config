@@ -31,10 +31,14 @@ def website_application_formfactory(instance=None):
             for config_name, lookup_dict in config_class.get_configs().items():
                 config_fields.append(config_name)
                 field_class = utils.import_module_attr(lookup_dict['field'])
+                default_text = "Default: %s" % lookup_dict['default']
+                if custom_help := lookup_dict.get('help'):
+                    help_text = "%s; %s" % (custom_help, default_text)
+                else:
+                    help_text = default_text
                 kwargs = dict(
                     label=config_name,
-                    help_text="%s Default: %s" % (lookup_dict.get('help', ''),
-                                                  lookup_dict['default']),
+                    help_text=help_text,
                     initial=lookup_dict['value'],
                     required=False
                 )
@@ -60,16 +64,19 @@ def website_application_formfactory(instance=None):
         cleaned_data = super(self.__class__, self).clean()
         if instance and config_class:
             if cleaned_data.get('reset_options'):
+                # The user checked the "reset to defaults" box
                 cleaned_data['options'] = utils.config_dict_value_from_default(
                     config_class.get_configs()
                 )
             else:
                 cleaned_configs = {k: {'value': v} for k, v in cleaned_data.items() if k in config_fields}
-                for config_field in config_fields:
-                    cleaned_data.pop(config_field, None)
                 cleaned_data['options'] = utils.update_config_dict(
                     config_class.get_configs(), cleaned_configs
                 )
+        # The custom "config fields" have been copied to a new dictionary under "options" in
+        # cleaned_data; If cleaned_data itself has keys matching any custom values, pop them.
+        for config_field in config_fields:
+            cleaned_data.pop(config_field, None)
         return cleaned_data
 
     properties.update({"config_fields": sorted(config_fields), 'clean': clean_form})
