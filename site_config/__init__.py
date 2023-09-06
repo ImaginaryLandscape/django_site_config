@@ -12,6 +12,7 @@ class SiteConfigBase(object):
     application_short_name = "default_application"
     application_verbose_name = "Default Application"
 
+    # Can be overridden to customize the backend used for a given config.
     def get_backend(self):
         backend = getattr(settings, 'SITECONFIG_BACKEND_DEFAULT',
             'site_config.backends.model_backend.DatabaseBackend')
